@@ -15,41 +15,6 @@ const icon = {
   className: "w-5 h-5 text-inherit",
 };
 
-export const routes_auth = {
-  title: "auth pages",
-  layout: "auth",
-  pages: [
-    {
-      icon: <ServerStackIcon {...icon} />,
-      name: "sign in",
-      path: "/sign-in",
-      element: <SignIn />,
-    },
-    {
-      icon: <RectangleStackIcon {...icon} />,
-      name: "sign up",
-      path: "/sign-up",
-      element: <SignUp />,
-    },
-
-    {
-      icon: <RectangleStackIcon {...icon} />,
-      name: "forgot password",
-      path: "/forgot-password",
-      element : <ForgotPassword/>,
-
-
-      
-    },
-    {
-      icon : <RectangleStackIcon {...icon} />,
-      name : "reset password",
-      path : "/reset-password",
-      element : <ResetPassword/>,
-    },
-  ],
-}
-
 export const routes = [
   {
     layout: "dashboard",
@@ -110,8 +75,31 @@ export const routes = [
       },
     ],
   },
-  routes_auth,
+  {
+    title: "auth pages",
+    layout: "auth",
+    pages: [
+      {
+        icon: <ServerStackIcon {...icon} />,
+        name: "sign in",
+        path: "/sign-in",
+        element: <SignIn />,
+      },
+      {
+        icon: <RectangleStackIcon {...icon} />,
+        name: "sign up",
+        path: "/sign-up",
+        element: <SignUp />,
+      },
+  
+      {
+        icon: <RectangleStackIcon {...icon} />,
+        name: "forgot password",
+        path: "/forgot-password",
+        element : <ForgotPassword/>,
+      }
+    ],
+  },
 ];
 
 export default routes;
-
