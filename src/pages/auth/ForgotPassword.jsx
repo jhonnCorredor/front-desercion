@@ -10,15 +10,32 @@ export function ForgotPassword() {
   const [notification, setNotification] = useState(null)
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
     try {
-      await Service.post("/auth/forgot-password", { email })
-      showNotification("green", "Se ha enviado un código de recuperación a tu correo.")
+      const response = await Service.post("/recuperarcontrasena/enviar-codigo/", { correo: email });
+      if (!response) {
+        throw new Error("La respuesta del backend es inválida");
+      }
+  
+      const user = response.usuario;
+      console.log("Data de User:", user);
+  
+      const expirationDate = new Date();
+      expirationDate.setTime(expirationDate.getTime() + 1 * 60 * 60 * 1000);
+      document.cookie = `user_id=${user}; expires=${expirationDate.toUTCString()}; path=/`;
+  
+      showNotification("green", "Se ha enviado un código de recuperación a tu correo.");
+      setTimeout(() => {
+        window.location.href = "/auth/reset-password";
+      }, 1000);
     } catch (error) {
-      console.error("Error al enviar el correo de recuperación:", error)
-      showNotification("red", "Error al enviar el correo. Por favor, intenta de nuevo.")
+      console.error("Error al enviar el correo de recuperación:", error);
+      showNotification("red", "Error al enviar el correo. Por favor, intenta de nuevo.");
     }
   }
+  
+
+
 
   const showNotification = (type, message) => {
     setNotification({ type, message })
