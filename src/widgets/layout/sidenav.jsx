@@ -8,6 +8,7 @@ import {
   Typography,
 } from "@material-tailwind/react";
 import { useMaterialTailwindController, setOpenSidenav } from "@/context";
+import Cookies from "js-cookie";
 
 export function Sidenav({ brandImg, brandName, routes }) {
   const [controller, dispatch] = useMaterialTailwindController();
@@ -19,6 +20,13 @@ export function Sidenav({ brandImg, brandName, routes }) {
     white: "bg-white shadow-sm",
     transparent: "bg-transparent",
   };
+
+  const handleLogout = (event) => {
+    event.preventDefault(); 
+    Cookies.remove("menu");
+    Cookies.remove("user");
+    
+  }
 
   const toggleSubmenu = (name) => {
     setExpandedMenus((prev) => ({
@@ -38,7 +46,7 @@ export function Sidenav({ brandImg, brandName, routes }) {
             variant="h6"
             color={sidenavType === "dark" ? "white" : "blue-gray"}
           >
-            {brandName}
+            Autogestión CIES
           </Typography>
         </Link>
         <IconButton
@@ -52,7 +60,7 @@ export function Sidenav({ brandImg, brandName, routes }) {
           <XMarkIcon strokeWidth={2.5} className="h-5 w-5 text-white" />
         </IconButton>
       </div>
-      <div className="m-4">
+      <div className="m-4 h-[calc(95%-64px)]" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
         {routes.map(({ layout, title, pages }, key) => (
           <ul key={key} className="mb-4 flex flex-col gap-1">
             {title && (
@@ -142,6 +150,54 @@ export function Sidenav({ brandImg, brandName, routes }) {
             ))}
           </ul>
         ))}
+        <ul className="mb-4 flex flex-col gap-1">
+          <li className="mx-3.5 mt-4 mb-2">
+                <Typography
+                  variant="small"
+                  color={sidenavType === "dark" ? "white" : "blue-gray"}
+                  className="font-black uppercase opacity-75"
+                >
+                  Configuración
+                </Typography>
+                <NavLink to="/auth/sign-in" onClick={handleLogout}>
+                  {({ isActive }) => (
+                    <Button
+                      variant={isActive ? "gradient" : "text"}
+                      color={
+                        isActive
+                          ? sidenavColor
+                          : sidenavType === "dark"
+                          ? "white"
+                          : "blue-gray"
+                      }
+                      className="flex items-center gap-4 px-4 capitalize"
+                      fullWidth
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={2}
+                        stroke="currentColor"
+                        className="h-5 w-5"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6A2.25 2.25 0 005.25 5.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15"
+                        />
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M21 12H9m3-3l-3 3 3 3"
+                        />
+                      </svg>
+                      <Typography className="font-medium capitalize">Cerrar Sesión</Typography>
+                    </Button>
+                  )}
+                </NavLink>
+          </li>
+        </ul>
       </div>
     </aside>
   );
