@@ -37,7 +37,16 @@ export const routes_auth = {
       name: "forgot password",
       path: "/forgot-password",
       element : <ForgotPassword/>,
-    }
+
+
+      
+    },
+    {
+      icon : <RectangleStackIcon {...icon} />,
+      name : "reset password",
+      path : "/reset-password",
+      element : <ResetPassword/>,
+    },
   ],
 }
 
