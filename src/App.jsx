@@ -14,7 +14,6 @@ function App() {
     const checkCookies = () => {
       if (!Cookies.get("menu") || !Cookies.get("user")) {
         setHasRequiredCookies(false);
-        navigate("/auth/sign-in", { replace: true });
       }
     };
 
