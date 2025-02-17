@@ -7,7 +7,7 @@ import {
   Configurator,
   Footer,
 } from "@/widgets/layout";
-import { routes,routes_auth } from "@/routes";
+import { routes} from "@/routes";
 import { useMaterialTailwindController, setOpenConfigurator } from "@/context";
 import Cookies from "js-cookie";
 
@@ -42,10 +42,10 @@ export function Dashboard() {
 
   menuDimanic = [
     {
+    title: "Pagina principal",
     layout: "dashboard",
     pages: mappedData
-    },
-    routes_auth
+    }
   ]
   }
 
