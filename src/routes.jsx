@@ -32,21 +32,21 @@ export const routes_auth = {
       element: <SignUp />,
     },
 
-    {
-      icon: <RectangleStackIcon {...icon} />,
-      name: "forgot password",
-      path: "/forgot-password",
-      element : <ForgotPassword/>,
+    // {
+    //   icon: <RectangleStackIcon {...icon} />,
+    //   name: "forgot password",
+    //   path: "/forgot-password",
+    //   element : <ForgotPassword/>,
 
 
       
-    },
-    {
-      icon : <RectangleStackIcon {...icon} />,
-      name : "reset password",
-      path : "/reset-password",
-      element : <ResetPassword/>,
-    },
+    // },
+    // {
+    //   icon : <RectangleStackIcon {...icon} />,
+    //   name : "reset password",
+    //   path : "/reset-password",
+    //   element : <ResetPassword/>,
+    // },
   ],
 }
 
