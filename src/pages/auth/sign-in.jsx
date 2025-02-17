@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Card, Input, Checkbox, Button, Typography, Alert } from "@material-tailwind/react";
 import { Link } from "react-router-dom";
 import { Service } from "@/data/api";
-import Cookies from "js-cookie"
+import Cookies from "js-cookie";
 
 export function SignIn() {
   const [correo, setEmail] = useState("");

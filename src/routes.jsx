@@ -13,9 +13,45 @@ import ForgotPassword from "./pages/auth/ForgotPassword";
 import ResetPassword from "./pages/auth/ResetPassword";
 import { AccesUser } from "./pages/dashboard/acces-users";
 
+
 const icon = {
   className: "w-5 h-5 text-inherit",
 };
+
+export const routes_auth = {
+  title: "auth pages",
+  layout: "auth",
+  pages: [
+    {
+      icon: <ServerStackIcon {...icon} />,
+      name: "sign in",
+      path: "/sign-in",
+      element: <SignIn />,
+    },
+    {
+      icon: <RectangleStackIcon {...icon} />,
+      name: "sign up",
+      path: "/sign-up",
+      element: <SignUp />,
+    },
+
+    {
+      icon: <RectangleStackIcon {...icon} />,
+      name: "forgo",
+      path: "/forgot-password",
+      element : <ForgotPassword/>,
+
+
+      
+    },
+    {
+      icon : <RectangleStackIcon {...icon} />,
+      name : "reset",
+      path : "/reset-password",
+      element : <ResetPassword/>,
+    },
+  ],
+}
 
 export const routes = [
   {
