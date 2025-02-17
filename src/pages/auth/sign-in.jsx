@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Card, Input, Checkbox, Button, Typography, Alert } from "@material-tailwind/react";
 import { Link } from "react-router-dom";
 import { Service } from "@/data/api";
+import Cookies from "js-cookie"
 
 export function SignIn() {
   const [correo, setEmail] = useState("");
@@ -12,25 +13,26 @@ export function SignIn() {
   const [notification, setNotification] = useState(null);
 
   const handleSignIn = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
     try {
-      const response = await Service.post("/login/", { correo, contrasena });
-      console.log("Inicio de sesión exitoso:", response);
+      const response = await Service.post("/login/", { correo, contrasena })
       setNotification({
-        type: "success",
+        type: "green",
         message: "Inicio de sesión exitoso. Redirigiendo...",
-      });
+      })
+      Cookies.set("menu", JSON.stringify(response.vistas_rol), { expires: rememberMe ? 30 : 1 })
+      Cookies.set("user", response.usuario_id, { expires: rememberMe ? 30 : 1 })
       setTimeout(() => {
-        window.location.href = "/dashboard/home";
-      }, 1000);
+        window.location.href = "/dashboard/home"
+      }, 1000)
     } catch (error) {
-      console.error("Error al iniciar sesión:", error);
+      console.error("Error al iniciar sesión:", error)
       setNotification({
-        type: "error",
+        type: "red",
         message: "Error al iniciar sesión. Por favor, verifica tus credenciales.",
-      });
+      })
     }
-  };
+  }
 
   return (
     <div
