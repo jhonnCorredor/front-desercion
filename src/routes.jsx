@@ -13,6 +13,7 @@ import ForgotPassword from "./pages/auth/ForgotPassword";
 import ResetPassword from "./pages/auth/ResetPassword";
 import { AccesUser } from "./pages/dashboard/acces-users";
 import { TableView } from "./pages/dashboard/View";
+import TableModule from "./pages/dashboard/module";
 
 
 const icon = {
@@ -82,6 +83,12 @@ export const routes = [
         name: "Vistas",
         path: "/view",
         element: <TableView  />,
+      },
+      {
+        icon: <TableCellsIcon {...icon} />,
+        name: "Modulos",
+        path: "/module",
+        element: <TableModule  />,
       },
       {
         icon: <InformationCircleIcon {...icon} />,

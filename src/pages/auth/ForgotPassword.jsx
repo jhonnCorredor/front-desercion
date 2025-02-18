@@ -17,7 +17,7 @@ export function ForgotPassword() {
         throw new Error("La respuesta del backend es inválida");
       }
   
-      const user = response.usuario;
+      const user = response.usuario_id;
       console.log("Data de User:", user);
   
       const expirationDate = new Date();
