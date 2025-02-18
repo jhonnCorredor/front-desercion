@@ -91,7 +91,7 @@ export const routes = [
         path: "/Rol",
         element: <RolTable />,
       },
-        name: "Modulos",
+       { name: "Modulos",
         path: "/module",
         element: <TableModule  />,
       },
