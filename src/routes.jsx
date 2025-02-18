@@ -14,6 +14,7 @@ import ResetPassword from "./pages/auth/ResetPassword";
 import { TableView } from "./pages/dashboard/View";
 import AccesUser from "./pages/dashboard/acces-users";
 import RolTable from "./pages/dashboard/Rol";
+import TableModule from "./pages/dashboard/module";
 
 
 const icon = {
@@ -89,6 +90,10 @@ export const routes = [
         name: "Roels",
         path: "/Rol",
         element: <RolTable />,
+      },
+        name: "Modulos",
+        path: "/module",
+        element: <TableModule  />,
       },
       {
         icon: <InformationCircleIcon {...icon} />,
