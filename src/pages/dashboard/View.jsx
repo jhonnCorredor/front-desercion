@@ -81,7 +81,7 @@ estado : false,
     { name: "nombre", label: "Nombre", type: "text" },
     { name: "descripcion", label: "Descripción", type: "textarea" },
     { name: "ruta", label: "Ruta", type: "text" },
-    {icono : "icono", label: "icono", type: "text"},
+    {name : "icono", label: "icono", type: "text"},
     {
       name: "estado",
       label: "Estado",
