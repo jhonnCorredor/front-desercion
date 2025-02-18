@@ -53,22 +53,10 @@ export function ConfirmationModal({ isOpen, onClose, onConfirm }: ConfirmationMo
           Ingresa el código de 4 dígitos que recibiste:
         </Typography>
         <div className="flex justify-center gap-3">
-          {code.map((digit, index) => (
-            <Input
-              key={index}
-              id={`otp-${index}`}
-              ref={(el) => (inputsRef.current[index] = el)}
-              type="text"
-              maxLength={1}
-              crossOrigin="anonymous"
-              value={digit}
-              onChange={(e) => handleChange(index, e.target.value)}
-              onKeyDown={(e) => handleKeyDown(index, e)}
-              containerProps={{
-                className: "min-w-0",
-              }}
+            <input
+             placeholder="Confirmar código"
             />
-          ))}
+          
         </div>
       </DialogBody>
       <DialogFooter className="flex justify-center">

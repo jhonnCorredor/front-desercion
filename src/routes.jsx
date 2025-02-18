@@ -12,6 +12,7 @@ import { element } from "prop-types";
 import ForgotPassword from "./pages/auth/ForgotPassword";
 import ResetPassword from "./pages/auth/ResetPassword";
 import { AccesUser } from "./pages/dashboard/acces-users";
+import { TableView } from "./pages/dashboard/View";
 
 
 const icon = {
@@ -74,6 +75,13 @@ export const routes = [
         name: "accesUser",
         path: "/acces-user",
         element: <AccesUser />,
+      },
+      //Tablas 
+      {
+        icon: <TableCellsIcon {...icon} />,
+        name: "Vistas",
+        path: "/view",
+        element: <TableView  />,
       },
       {
         icon: <InformationCircleIcon {...icon} />,
