@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Card, Input, Checkbox, Button, Typography, Alert } from "@material-tailwind/react"
+import { Card, Input, Checkbox, Button, Typography, Alert, Select } from "@material-tailwind/react"
 import { Link } from "react-router-dom"
 import { Service } from "@/data/api"
 
@@ -11,6 +11,7 @@ export function SignUp() {
     nombres: "",
     apellidos: "",
     documento: "",
+    tipo_documento: "",
     contrasena: "",
   })
   const [aceptaTerminos, setAceptaTerminos] = useState(false)
@@ -31,9 +32,8 @@ export function SignUp() {
     }
     try {
       const response = await Service.post("/usuario/", {
-        ...formData,
-        estado: true,
-      })
+        ...formData
+            })
       console.log("Registro exitoso:", response)
       setNotification({
         type: "green",
@@ -89,8 +89,18 @@ export function SignUp() {
             onChange={handleChange}
             required
           />
+          <select
+            label="Tipo de documento"
+            name="tipo_documento"
+            value={formData.tipo_documento}
+            onChange={handleChange}
+            required
+          >
+            <option value="CD">Cédula de ciudadanía</option>
+            <option value="TT">Tarjeta de identidad</option>
+          </select>
           <Input
-            size="lg"
+            size="lg" 
             label="Documento"
             name="documento"
             value={formData.documento}
