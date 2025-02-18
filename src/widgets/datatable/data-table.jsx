@@ -1,9 +1,12 @@
 import { useState, useEffect } from "react"
 import DataTable from "react-data-table-component"
+import CustomPagination from "./custom-pagination"
 
 function DataTableComponent({ columns, data, title }) {
   const [searchText, setSearchText] = useState("")
   const [filteredData, setFilteredData] = useState([])
+  const [currentPage, setCurrentPage] = useState(1)
+  const [rowsPerPage, setRowsPerPage] = useState(10)
 
   useEffect(() => {
     setFilteredData(data)
@@ -18,58 +21,64 @@ function DataTableComponent({ columns, data, title }) {
     )
 
     setFilteredData(filtered)
+    setCurrentPage(1) 
   }
+
+  const totalPages = Math.ceil(filteredData.length / rowsPerPage)
+  useEffect(() => {
+    if (currentPage > totalPages) {
+      setCurrentPage(1)
+    }
+  }, [filteredData, totalPages])
+
+  const paginatedData = filteredData.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage)
 
   const customStyles = {
     table: {
-        style: {
-          backgroundColor: "#ffffff",
-          borderRadius: "0.5rem",
-          overflow: "hidden",
-          border: "1px solid #e5e7eb", // Borde gris claro
+      style: {
+        backgroundColor: "#ffffff",
+        borderRadius: "0.5rem",
+        overflow: "hidden",
+        border: "1px solid #e5e7eb",
+      },
+    },
+    headRow: {
+      style: {
+        backgroundColor: "#f3f4f6",
+        color: "#111827",
+        fontWeight: "bold",
+      },
+    },
+    rows: {
+      style: {
+        backgroundColor: "#ffffff",
+        "&:hover": {
+          backgroundColor: "#f9fafb",
         },
       },
-      headRow: {
-        style: {
-          backgroundColor: "#f3f4f6", // bg-gray-100
-          color: "#111827", // text-gray-900
-          fontWeight: "bold",
-          "&:hover": {
-            backgroundColor: "#f3f4f6", // bg-gray-100
-          },
-        },
-      },
-      rows: {
-        style: {
-          backgroundColor: "#ffffff", // Todas las filas blancas
-          "&:hover": {
-            backgroundColor: "#f9fafb", // Hover gris muy claro
-          },
-        },
-      },
+    },
     pagination: {
       style: {
-        backgroundColor: "#ffffff", // bg-white
-        color: "#374151", // text-gray-700
+        backgroundColor: "#ffffff",
+        color: "#374151",
       },
       pageButtonsStyle: {
-        backgroundColor: "#f3f4f6", // bg-gray-100
-        color: "#374151", // text-gray-700
+        backgroundColor: "#f3f4f6",
+        color: "#374151",
         "&:hover:not(:disabled)": {
-          backgroundColor: "#e5e7eb", // bg-gray-200
+          backgroundColor: "#e5e7eb",
         },
       },
     },
   }
 
   return (
-    <div className="w-full  mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
+    <div className="w-full mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
       <div className="px-6 py-4 border-b border-gray-200">
         <h2 className="text-xl font-semibold text-gray-800">{title}</h2>
       </div>
       <div className="p-6">
         <div className="mb-4 relative">
-          {/* <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" /> */}
           <input
             type="text"
             placeholder="Buscar..."
@@ -80,11 +89,21 @@ function DataTableComponent({ columns, data, title }) {
         </div>
         <DataTable
           columns={columns}
-          data={filteredData}
+          data={paginatedData} 
           pagination
-          highlightOnHover
+          paginationServer 
+          paginationTotalRows={filteredData.length}
           customStyles={customStyles}
+          highlightOnHover
           noDataComponent={<div className="p-4 text-center text-gray-500">No se encontraron resultados</div>}
+          paginationComponent={() => (
+            <CustomPagination
+              currentPage={currentPage}
+              rowsPerPage={rowsPerPage}
+              rowCount={filteredData.length}
+              onChangePage={setCurrentPage}
+            />
+          )}
         />
       </div>
     </div>
@@ -92,4 +111,3 @@ function DataTableComponent({ columns, data, title }) {
 }
 
 export default DataTableComponent
-

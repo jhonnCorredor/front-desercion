@@ -1,70 +1,91 @@
-import { useState, useEffect } from "react";
-import { Card } from "@material-tailwind/react";
-import DataTableComponent from "@/widgets/datatable/data-table";
-import { Service } from "@/data/api";
-import { CheckIcon } from "@heroicons/react/24/solid";
+"use client"
+
+import { useState, useEffect } from "react"
+import {
+  Card,
+  Dialog,
+  DialogHeader,
+  DialogBody,
+  DialogFooter,
+  Button,
+  Typography,
+  Select,
+  Option,
+} from "@material-tailwind/react"
+import DataTableComponent from "@/widgets/datatable/data-table"
+import { Service } from "@/data/api"
+import { CheckIcon, UserCircleIcon } from "@heroicons/react/24/solid"
 
 export function AccesUser() {
-  const [data, setData] = useState([]);
-  const [roles, setRoles] = useState([]);
-  const [showModal, setShowModal] = useState(false);
-  const [selectedRow, setSelectedRow] = useState(null);
-  const [selectedRole, setSelectedRole] = useState(""); 
+  const [data, setData] = useState([])
+  const [roles, setRoles] = useState([])
+  const [showModal, setShowModal] = useState(false)
+  const [selectedRow, setSelectedRow] = useState(null)
+  const [selectedRole, setSelectedRole] = useState("")
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState(null) 
 
   const fetchData = async () => {
+    setIsLoading(true)
+    setError(null) 
     try {
-      const response = await Service.get("/usuario/usuario_sin_rol/");
-      setData(response || []);
+      const response = await Service.get("/usuario/usuario_sin_rol/")
+      setData(response || [])
     } catch (error) {
-      console.error("Error al obtener los usuarios:", error);
-      setData([]);
+      console.error("Error al obtener los usuarios:", error)
+      setError("Error al obtener los usuarios. Por favor, inténtalo de nuevo más tarde.") 
+      setData([])
+    } finally {
+      setIsLoading(false)
     }
-  };
+  }
 
   const fetchRoles = async () => {
     try {
-      const response = await Service.get("/rol/");
-      setRoles(response || []);
+      const response = await Service.get("/rol/")
+      setRoles(response || [])
     } catch (error) {
-      console.error("Error al obtener los roles: ", error);
-      setRoles([]);
+      console.error("Error al obtener los roles: ", error)
+      setRoles([])
     }
-  };
+  }
 
   useEffect(() => {
-    fetchRoles();
-    fetchData();
-  }, []);
+    fetchRoles()
+    fetchData()
+  }, [])
 
   const handleAction = (row) => {
-    setSelectedRow(row);
-    setShowModal(true);
-  };
-  
-  const handleRoleChange = (event) => {
-    setSelectedRole(event.target.value); 
-  };
+    setSelectedRow(row)
+    setShowModal(true)
+  }
+
+  const handleRoleChange = (value) => {
+    setSelectedRole(value)
+  }
 
   const handleCloseModal = () => {
-    setShowModal(false);
-  };
+    setShowModal(false)
+    setSelectedRole("")
+  }
 
   const accesUser = async () => {
     try {
-        const DataAcces = {
-            estado: true,
-            usuario_id: selectedRow.id,
-            rol_id: selectedRole,
-        }
+      const DataAcces = {
+        estado: true,
+        usuario_id: selectedRow.id,
+        rol_id: selectedRole,
+      }
 
-        const response = await Service.post("/usuariorol/", DataAcces)
-        alert("Usuario autorizado.")
-        setSelectedRow(null)
-        setSelectedRole("")
-        await fetchData()
-        handleCloseModal()
+      await Service.post("/usuariorol/", DataAcces)
+      alert("Usuario autorizado.")
+      setSelectedRow(null)
+      setSelectedRole("")
+      await fetchData()
+      handleCloseModal()
     } catch (error) {
-        console.error("Error al autorizar el usuario: ", error)
+      console.error("Error al autorizar el usuario: ", error)
+      setError("Error al autorizar el usuario. Por favor, inténtalo de nuevo más tarde.") // Set error message
     }
   }
 
@@ -86,80 +107,75 @@ export function AccesUser() {
       sortable: true,
     },
     {
+        name: "tipo de documento",
+        selector: (row) => row.tipoDocumento,
+        sortable: true,
+      },
+    {
       name: "documento",
       selector: (row) => row.documento,
       sortable: true,
     },
     {
       name: "Acciones",
-      selector: (row) => (
-        <button
-          onClick={() => handleAction(row)}
-          style={{
-            padding: "5px 10px",
-            backgroundColor: "#3498db",
-            color: "white",
-            border: "none",
-            borderRadius: "5px",
-            cursor: "pointer",
-          }}
-        >
-          <CheckIcon className="w-5 h-5" />
-        </button>
+      cell: (row) => (
+        <Button color="green" size="sm" className="flex items-center gap-2" onClick={() => handleAction(row)}>
+          <CheckIcon className="h-4 w-4" />
+        </Button>
       ),
       ignoreRowClick: true,
       allowOverflow: true,
       button: true,
     },
-  ];
+  ]
 
   return (
-    <div className="mt-12 mb-8 flex flex-col gap-12">
+    <div className="mt-8 mb-8 flex flex-col gap-12">
       <Card>
-        <DataTableComponent columns={columns} data={data} title={"Acceso de usuarios"} />
+        <DataTableComponent
+          columns={columns}
+          data={data}
+          title={"Acceso de usuarios"}
+          loading={isLoading}
+          error={error}
+        />{" "}
+        {/* Pass error state to DataTableComponent */}
       </Card>
 
-      {/* Modal */}
-      {showModal && (
-        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
-          <div className="bg-white p-6 rounded-lg max-w-sm w-full">
-            <h2 className="text-xl font-semibold mb-4">Autorizar usuario</h2>
-
-            <div>
-              <p>Asignar rol:</p>
-              <select
-                value={selectedRole}
-                onChange={handleRoleChange}
-                className="border p-2 rounded w-full"
-              >
-                <option value="" disabled>Seleccione un rol</option>
-                {roles.map((role) => (
-                  <option key={role.id} value={role.id}>
-                    {role.nombre}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div className="flex justify-end mt-4">
-              <button
-                onClick={accesUser}
-                className="px-4 py-2 bg-green-500 text-white rounded-lg mr-2"
-              >
-                Autorizar
-              </button>
-              <button
-                onClick={handleCloseModal}
-                className="px-4 py-2 bg-blue-500 text-white rounded-lg"
-              >
-                Cerrar
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <Dialog open={showModal} handler={handleCloseModal} size="xs">
+        <DialogHeader className="justify-center">
+          <Typography variant="h5" color="blue-gray">
+            Autorizar Usuario
+          </Typography>
+        </DialogHeader>
+        <DialogBody divider className="grid place-items-center gap-4">
+          <UserCircleIcon className="w-20 h-20 text-blue-500" />
+          <Typography color="blue-gray" variant="h4">
+            {selectedRow?.nombres} {selectedRow?.apellidos}
+          </Typography>
+          <Typography className="text-center font-normal" color="gray">
+            Asigne un rol al usuario para autorizar su acceso al sistema.
+          </Typography>
+          <Select label="Seleccione un rol" value={selectedRole} onChange={handleRoleChange} className="w-full">
+            {roles.map((role) => (
+              <Option key={role.id} value={role.id}>
+                {role.nombre}
+              </Option>
+            ))}
+          </Select>
+        </DialogBody>
+        <DialogFooter className="space-x-2 justify-center">
+          <Button variant="outlined" color="red" onClick={handleCloseModal}>
+            Cancelar
+          </Button>
+          <Button variant="gradient" color="green" onClick={accesUser} disabled={!selectedRole}>
+            Autorizar
+          </Button>
+        </DialogFooter>
+      </Dialog>
     </div>
-  );
+  )
 }
 
-export default AccesUser;
+export default AccesUser
+
