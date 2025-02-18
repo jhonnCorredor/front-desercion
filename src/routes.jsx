@@ -11,8 +11,10 @@ import { SignIn, SignUp } from "@/pages/auth";
 import { element } from "prop-types";
 import ForgotPassword from "./pages/auth/ForgotPassword";
 import ResetPassword from "./pages/auth/ResetPassword";
-import { AccesUser } from "./pages/dashboard/acces-users";
 import { TableView } from "./pages/dashboard/View";
+import AccesUser from "./pages/dashboard/acces-users";
+import RolTable from "./pages/dashboard/Rol";
+import TableModule from "./pages/dashboard/module";
 
 
 const icon = {
@@ -82,6 +84,16 @@ export const routes = [
         name: "Vistas",
         path: "/view",
         element: <TableView  />,
+      },
+      {
+        icon: <TableCellsIcon {...icon} />,
+        name: "Roels",
+        path: "/Rol",
+        element: <RolTable />,
+      },
+        name: "Modulos",
+        path: "/module",
+        element: <TableModule  />,
       },
       {
         icon: <InformationCircleIcon {...icon} />,

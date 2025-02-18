@@ -7,14 +7,14 @@ import {
   DialogHeader,
   DialogBody,
   DialogFooter,
-  Button,
   Typography,
   Select,
   Option,
 } from "@material-tailwind/react"
+import { Button } from "@/components/ui/button"
 import DataTableComponent from "@/widgets/datatable/data-table"
 import { Service } from "@/data/api"
-import { CheckIcon, UserCircleIcon } from "@heroicons/react/24/solid"
+import { CheckIcon, UserCircleIcon } from "lucide-react"
 
 export function AccesUser() {
   const [data, setData] = useState([])
@@ -108,7 +108,7 @@ export function AccesUser() {
     },
     {
         name: "tipo de documento",
-        selector: (row) => row.tipoDocumento,
+        selector: (row) => row.tipoDocumento_nombre,
         sortable: true,
       },
     {
@@ -119,13 +119,15 @@ export function AccesUser() {
     {
       name: "Acciones",
       cell: (row) => (
-        <Button color="green" size="sm" className="flex items-center gap-2" onClick={() => handleAction(row)}>
+        <Button variant="outline" size="sm" className="flex bg-green-500 text-white hover:bg-green-500 hover:bg-opacity-80 items-center gap-2"  onClick={() => handleAction(row)}>
           <CheckIcon className="h-4 w-4" />
+          Autorizar
         </Button>
       ),
       ignoreRowClick: true,
       allowOverflow: true,
       button: true,
+      width: "150px",
     },
   ]
 
