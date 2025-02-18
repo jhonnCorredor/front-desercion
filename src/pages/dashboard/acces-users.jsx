@@ -121,7 +121,6 @@ export function AccesUser() {
       cell: (row) => (
         <Button variant="outline" size="sm" className="flex bg-green-500 text-white hover:bg-green-500 hover:bg-opacity-80 items-center gap-2"  onClick={() => handleAction(row)}>
           <CheckIcon className="h-4 w-4" />
-          Autorizar
         </Button>
       ),
       ignoreRowClick: true,

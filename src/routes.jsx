@@ -15,6 +15,7 @@ import { TableView } from "./pages/dashboard/View";
 import AccesUser from "./pages/dashboard/acces-users";
 import RolTable from "./pages/dashboard/Rol";
 import TableModule from "./pages/dashboard/module";
+import TableUser from "./pages/dashboard/user";
 
 
 const icon = {
@@ -91,13 +92,18 @@ export const routes = [
         path: "/Rol",
         element: <RolTable />,
       },
-       { name: "Modulos",
+      {
+        name: "Modulos",
         path: "/module",
         element: <TableModule  />,
       },
       {
-        icon: <InformationCircleIcon {...icon} />,
-        name: "notifications",
+        name: "Usuarios",
+        path: "/user",
+        element: <TableUser  />,
+      },
+      {
+        name: "Notificaciones",
         path: "/notifications",
         element: <Notifications />,
       },

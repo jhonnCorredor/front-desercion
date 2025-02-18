@@ -22,7 +22,7 @@ export function TableUser() {
     setIsLoading(true)
     setError(null)
     try {
-      const response = await Service.get("/modulos/")
+      const response = await Service.get("/usuario/")
       setData(response || [])
     } catch (error) {
       console.error("Error al obtener los usuarios:", error)
@@ -58,24 +58,22 @@ export function TableUser() {
       setIsLoading(true)
       setError(null)
       if (selectedRow) {
-        await Service.put(`/modulos/${selectedRow.id}/`, formData)
+        await Service.put(`/usuario/${selectedRow.id}/`, formData)
 
         Swal.fire({
-            title: "Modulo actualizado",
+            title: "Usuario actualizado",
             icon: "success",
-            position: "bottom-right",
             showConfirmButton: false,
             timer: 1500,
         })
       } else {
-        await Service.post("/modulos/", formData, {
+        await Service.post("/usuario/", formData, {
 estado : false,
         })
 
         Swal.fire({
-            title: "Modulo creado",
+            title: "Usuario creado",
             icon: "success",
-            position: "bottom-right",
             showConfirmButton: false,
             timer: 1500,
         })
@@ -84,7 +82,13 @@ estado : false,
       await fetchData()
       handleCloseModal()
     } catch (error) {
-        showNotification("red", "Error al crear el modulo. Por favor, intenta de nuevo.");
+        Swal.fire({
+            title: "Error al guardar el usuario",
+            text: error,
+            icon: "error",
+            showConfirmButton: false,
+            timer: 1500,
+        })
     } finally {
       setIsLoading(false)
     }
@@ -93,7 +97,7 @@ estado : false,
   const handleDelete = async (row) => {
     try {
         Swal.fire({
-            title: "¿Estás seguro de eliminar este modulo?",
+            title: "¿Estás seguro de eliminar este usuario?",
             text: "Esta acción no se puede deshacer.",
             icon: "warning",
             showCancelButton: true,
@@ -104,11 +108,10 @@ estado : false,
             reverseButtons: true,
         }).then(async (result) => {
             if (result.isConfirmed) {
-                await Service.delete(`/modulos/${row.id}/`)
+                await Service.delete(`/usuario/${row.id}/`)
                 Swal.fire({
-                    title: "Modulo eliminado",
-                    icon: "success",
-                    position: "bottom-right",
+                    title: "Usuario eliminado",
+                    icon: "success",   
                     showConfirmButton: false,
                     timer: 1500,
                 })
@@ -116,14 +119,25 @@ estado : false,
             }
         })
     } catch (error) {
-        showNotification("red", "Error al eliminar el modulo. Por favor, intenta de nuevo.");
+        Swal.fire({
+            title: "Error al eliminar el usuarioa",
+            text: error,
+            icon: "error",
+            showConfirmButton: false,
+            timer: 1500,
+        })
     }
   }
 
   const modalFields = [
-    { name: "nombre", label: "Nombre", type: "text" },
-    { name: "descripcion", label: "Descripción", type: "textarea" },
-    { name : "icono", label: "Icono", type: "text"},
+    { name: "nombres", label: "Nombres", type: "text" },
+    { name: "apellidos", label: "Apellidos", type: "text" },
+    { name: "correo", label: "Correo electronico", type: "email" },
+    { name : "documento", label: "Numero de documento", type: "number"},
+    { name: "tipoDocumento", label: "Tipo de documento", type: "select", 
+        options: [
+        { value: "1", label: "Cedula de ciudadania" },
+      ], },
   ]
 
   const columns = [
@@ -134,28 +148,38 @@ estado : false,
       omit: true,
     },
     {
-      name: "nombre",
-      selector: (row) => row.nombre,
+      name: "Nombres",
+      selector: (row) => row.nombres,
       sortable: true,
     },
     {
-      name: "descripcion",
-      selector: (row) => row.descripcion,
+      name: "Apellidos",
+      selector: (row) => row.apellidos,
       sortable: true,
     },
     {
-      name: "icono",
-      selector: (row) => row.icono,
+        name: "Correo electronico",
+        selector: (row) => row.apellidos,
+        sortable: true,
+      },
+    {
+      name: "Documento",
+      selector: (row) => row.documento,
       sortable: true,
     },
+    {
+        name: "Tipo de documento",
+        selector: (row) => row.tipoDocumento,
+        sortable: true,
+      },
     {
       name: "Acciones",
       cell: (row) => (
-        <div>
-        <Button variant="outline" size="sm" className="flex items-center bg-green-500 text-white hover:bg-green-500 hover:bg-opacity-80 gap-2 min-w-[95px]" onClick={() => handleAction(row)}>
+        <div className="flex items-center gap-2">
+        <Button variant="outline" size="sm" className="flex items-center bg-green-500 text-white hover:bg-green-500 hover:bg-opacity-80 gap-2 " onClick={() => handleAction(row)}>
               <CheckIcon className="h-4 w-4" />
           </Button>
-        <Button variant="outline" size="sm" className="flex items-center bg-red-500 text-white hover:bg-red-500 hover:bg-opacity-80 gap-2 min-w-[95px]" onClick={() => handleDelete(row)}>
+        <Button variant="outline" size="sm" className="flex items-center bg-red-500 text-white hover:bg-red-500 hover:bg-opacity-80 gap-2 " onClick={() => handleDelete(row)}>
               <TrashIcon className="h-4 w-4" />
           </Button>
         </div>
@@ -171,10 +195,10 @@ estado : false,
     <div className="mt-8 mb-8 space-y-6">
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-2xl font-bold">Gestión de Modulos</CardTitle>
+          <CardTitle className="text-2xl font-bold">Gestión de Usuarios</CardTitle>
           <Button variant="default" size="sm" className="flex items-center gap-2" onClick={() => setIsModalOpen(true)}>
             <PlusIcon className="h-4 w-4" />
-            Agregar Nuevo Modulo
+            Agregar Nuevo Usuario
           </Button>
         </CardHeader>
         <CardContent>
@@ -189,7 +213,7 @@ estado : false,
         isOpen={isModalOpen}
         onClose={handleCloseModal}
         onSubmit={handleSubmit}
-        title={selectedRow ? "Editar Modulo" : "Crear Nuevo Modulo"}
+        title={selectedRow ? "Editar Usuario" : "Crear Nuevo Usuario"}
         fields={modalFields}
         initialData={selectedRow ? { ...selectedRow } : null}
       />
