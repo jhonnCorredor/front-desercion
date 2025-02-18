@@ -64,7 +64,7 @@ export function DashboardNavbar() {
           <IconButton variant="text" color="blue-gray" className="grid xl:hidden" onClick={() => setOpenSidenav(dispatch, !openSidenav)}>
             <Bars3Icon className="h-6 w-6 text-blue-gray-500" />
           </IconButton>
-          <Link to="/auth/sign-in">
+          <Link to="/dashboard/profile">
             <Button variant="text" color="blue-gray" className="hidden xl:flex items-center gap-1 px-4 normal-case">
               <UserCircleIcon className="h-5 w-5 text-blue-gray-500" />
               {user ? `${user.nombres} ${user.apellidos}` : "Ingresar"}

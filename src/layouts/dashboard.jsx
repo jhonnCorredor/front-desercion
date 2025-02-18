@@ -50,7 +50,7 @@ export function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-blue-gray-50/50">
+    <div className="min-h-screen " style={{ backgroundColor: "rgb(229 253 228)" }}>
       <Sidenav
         routes={menuDimanic? menuDimanic : routes}
         brandImg={
@@ -58,7 +58,7 @@ export function Dashboard() {
         }
       />
       <div className="p-4 xl:ml-80">
-        <DashboardNavbar />
+        <DashboardNavbar className="text-dark"/>
         <Configurator />
         <IconButton
           size="lg"
@@ -78,7 +78,7 @@ export function Dashboard() {
               ))
           )}
         </Routes>
-        <div className="text-blue-gray-600">
+        <div className="text-dark">
           <Footer />
         </div>
       </div>

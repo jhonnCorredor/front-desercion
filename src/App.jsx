@@ -31,6 +31,7 @@ function App() {
             <Route key={path} exact path={path} element={element} />
           ))
       )}
+
       <Route path="/auth/*" element={hasRequiredCookies ? <Navigate to="/dashboard/home" /> : <Auth />} />
       <Route path="/dashboard/*" element={hasRequiredCookies ? <Dashboard /> : <Navigate to="/auth/sign-in" />} />
       <Route path="*" element={<Navigate to="/sign-in" replace />} />
