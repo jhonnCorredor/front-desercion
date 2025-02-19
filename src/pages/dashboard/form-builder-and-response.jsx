@@ -9,16 +9,52 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Plus, Trash2, Copy, Image, Mail } from 'lucide-react';
+import { Service } from '@/data/api';
+import Cookies from 'js-cookie';
 
 export function Formulario() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [questions, setQuestions] = useState([]);
 
+  const handleSubmit = async () => {
+    try {
+      const cuestionario = await Service.post('/cuestionario/', {
+        nombre: title,
+        descripcion: description,
+        usuario: Cookies.get('user')
+      });
+      console.log('Cuestionario guardado:', cuestionario);
+  
+      if (cuestionario) {
+        const preguntas = await Promise.all(questions.map(async (q, index) => {
+          console.log('Guardando pregunta', q);
+
+          const preguntaData = {
+            cuestionario: cuestionario.id,
+            texto: q.question,
+            tipo: q.type,
+            opciones: q.type === "seleccion multiple" ? q.options : {}
+          };
+  
+          const pregunta = await Service.post('/pregunta/', preguntaData);
+          console.log('Pregunta guardada:', pregunta);
+  
+          return pregunta;
+        }));
+        
+        console.log('Preguntas guardadas:', preguntas);
+      }
+    } catch (error) {
+      console.error("Error al guardar el formulario:", error);
+    }
+  };
+  
+
   const addQuestion = () => {
     const newQuestion = {
       id: Date.now().toString(),
-      type: 'multiple',
+      type: 'seleccion multiple',
       question: '',
       options: ['']
     };
@@ -56,7 +92,7 @@ export function Formulario() {
     switch (question.type) {
       case 'abierta':
         return <Input disabled placeholder="Texto de respuesta corta" className="mt-2 bg-gray-100" />;
-      case 'multiple':
+      case 'seleccion multiple':
         return (
           <RadioGroup className="space-y-2 mt-2">
             {question.options.map((option, index) => (
@@ -160,7 +196,7 @@ export function Formulario() {
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="abierta">Respuesta corta</SelectItem>
-                        <SelectItem value="multiple">Selección múltiple</SelectItem>
+                        <SelectItem value="seleccion multiple">Selección múltiple</SelectItem>
                         <SelectItem value="casillas">Casillas de verificación</SelectItem>
                         <SelectItem value="verdadero_falso">Verdadero/Falso</SelectItem>
                       </SelectContent>
@@ -168,7 +204,7 @@ export function Formulario() {
                   </div>
                   {renderQuestionInput(question)}
                   <div className="flex justify-end space-x-2 mt-4">
-                    {['multiple', 'casillas'].includes(question.type) && (
+                    {['seleccion multiple', 'casillas'].includes(question.type) && (
                       <Button variant="outline" size="sm" onClick={() => addOption(question.id)} className=" text-green-600 hover:bg-green-50">
                         <Plus className="w-4 h-4 mr-1" /> Agregar opción
                       </Button>
@@ -184,8 +220,11 @@ export function Formulario() {
               </Card>
             ))}
 
-            <Button onClick={addQuestion} className="w-full py-2 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition-colors">
+            <Button onClick={addQuestion} className="w-full  py-2 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition-colors">
               <Plus className="w-4 h-4 mr-2" /> Agregar pregunta
+            </Button>
+            <Button onClick={handleSubmit} className="w-full mt-4 py-2 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition-colors">
+              <Plus className="w-4 h-4 mr-2" /> Guardar cuestionario
             </Button>
           </TabsContent>
           <TabsContent value="responses">

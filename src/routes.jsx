@@ -19,6 +19,7 @@ import SignIn from "./pages/auth/sign-in";
 import { SignUp } from "./pages/auth";
 import Formulario from "./pages/dashboard/form-builder-and-response";
 import TableRolView from "./pages/dashboard/rol_view";
+import QuestionnaireForm from "./pages/dashboard/questionarie-form";
 
 
 const icon = {
@@ -118,9 +119,14 @@ export const routes = [
       },
 {
   name: "Cuestioanrios",
-  path: "/Cuestioanrios",
+  path: "/Cuestionarios",
   element: <Formulario />,
-}
+},
+{
+  name: "formulario",
+  path: "/Formulario",
+  element: <QuestionnaireForm />,
+},
     ],
   },
   {
