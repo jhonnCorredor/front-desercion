@@ -17,6 +17,7 @@ import TableModule from "./pages/dashboard/module";
 import TableUser from "./pages/dashboard/user";
 import SignIn from "./pages/auth/sign-in";
 import { SignUp } from "./pages/auth";
+import Formulario from "./pages/dashboard/form-builder-and-response";
 
 
 const icon = {
@@ -108,7 +109,11 @@ export const routes = [
         path: "/notifications",
         element: <Notifications />,
       },
-
+{
+  name: "Cuestioanrios",
+  path: "/Cuestioanrios",
+  element: <Formulario />,
+}
     ],
   },
   {

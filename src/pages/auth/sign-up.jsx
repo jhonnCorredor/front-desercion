@@ -15,7 +15,7 @@ export function SignUp() {
     nombres: "",
     apellidos: "",
     documento: "",
-    tipo_documento: "",
+    tipoDocumento: "",
     contrasena: "",
   })
   const [aceptaTerminos, setAceptaTerminos] = useState(false)
@@ -117,16 +117,16 @@ export function SignUp() {
               </div>
 
               <Select
-                name="tipo_documento"
-                value={formData.tipo_documento}
-                onValueChange={(value) => setFormData({ ...formData, tipo_documento: value })}
+                name="tipoDocumento"
+                value={formData.tipoDocumento}
+                onValueChange={(value) => setFormData({ ...formData, tipoDocumento: value })}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Tipo de documento" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="CD">Cédula de ciudadanía</SelectItem>
-                  <SelectItem value="TT">Tarjeta de identidad</SelectItem>
+                  <SelectItem value="1">Cédula de ciudadanía</SelectItem>
+                  <SelectItem value="2">Tarjeta de identidad</SelectItem>
                 </SelectContent>
               </Select>
 
