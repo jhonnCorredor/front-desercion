@@ -18,6 +18,7 @@ import TableUser from "./pages/dashboard/user";
 import SignIn from "./pages/auth/sign-in";
 import { SignUp } from "./pages/auth";
 import Formulario from "./pages/dashboard/form-builder-and-response";
+import TableRolView from "./pages/dashboard/rol_view";
 
 
 const icon = {
@@ -93,6 +94,12 @@ export const routes = [
         name: "Roels",
         path: "/Rol",
         element: <RolTable />,
+      },
+      {
+        icon: <TableCellsIcon {...icon} />,
+        name: "Rolvista",
+        path: "/RolView",
+        element: <TableRolView />,
       },
       {
         name: "Modulos",

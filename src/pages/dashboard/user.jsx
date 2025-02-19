@@ -11,6 +11,7 @@ import Swal from "sweetalert2"
 
 export function TableUser() {
   const [data, setData] = useState([])
+  const [tipoDocumento, setTipoDocumento] = useState([])
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedRow, setSelectedRow] = useState(null)
   
@@ -33,8 +34,24 @@ export function TableUser() {
     }
   }, [])
 
+  const fetchTipoDocumento = async () => {
+    try {
+      const response = await Service.get("/documento/")
+
+      setTipoDocumento(response.map((item) => ({
+        value: item.id,
+        label: item.nombre,
+      }))
+      )
+    } catch (error) {
+      console.error("Error al obtener los tipos de documento:", error)
+      setTipoDocumento([])
+    }
+  }
+
   useEffect(() => {
     fetchData()
+    fetchTipoDocumento()
   }, [fetchData])
 
   const handleAction = (row) => {
@@ -134,10 +151,7 @@ estado : false,
     { name: "apellidos", label: "Apellidos", type: "text" },
     { name: "correo", label: "Correo electronico", type: "email" },
     { name : "documento", label: "Numero de documento", type: "number"},
-    { name: "tipoDocumento", label: "Tipo de documento", type: "select", 
-        options: [
-        { value: "1", label: "Cedula de ciudadania" },
-      ], },
+    { name: "tipoDocumento", label: "Tipo de documento", type: "select", options: tipoDocumento, },
   ]
 
   const columns = [
@@ -159,7 +173,7 @@ estado : false,
     },
     {
         name: "Correo electronico",
-        selector: (row) => row.apellidos,
+        selector: (row) => row.correo,
         sortable: true,
       },
     {
@@ -169,7 +183,7 @@ estado : false,
     },
     {
         name: "Tipo de documento",
-        selector: (row) => row.tipoDocumento,
+        selector: (row) => tipoDocumento.find((item) => item.value === row.tipoDocumento)?.label,
         sortable: true,
       },
     {
