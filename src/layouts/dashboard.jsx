@@ -52,7 +52,10 @@ export function Dashboard() {
   return (
     <div
       className="min-h-screen"
-      style={{ backgroundColor: "#e5e5e5"}}
+      style={{
+        backgroundColor: "#e5e5e5",
+      }}
+
     >
       <Sidenav
         routes={menuDimanic? menuDimanic : routes}

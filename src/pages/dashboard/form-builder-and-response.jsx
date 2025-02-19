@@ -97,12 +97,12 @@ export function Formulario() {
           <RadioGroup className="space-y-2 mt-2">
             {question.options.map((option, index) => (
               <div key={index} className="flex items-center space-x-2">
-                <RadioGroupItem value={`option-${index}`} id={`option-${question.id}-${index}`} />
+                <RadioGroupItem value={option-${index}} id={option-${question.id}-${index}} />
                 <Input
                   value={option}
                   onChange={(e) => updateOption(question.id, index, e.target.value)}
                   className="flex-1"
-                  placeholder={`Opción ${index + 1}`}
+                  placeholder={Opción ${index + 1}}
                 />
               </div>
             ))}
@@ -113,12 +113,12 @@ export function Formulario() {
           <div className="space-y-2 mt-2">
             {question.options.map((option, index) => (
               <div key={index} className="flex items-center space-x-2">
-                <Checkbox id={`checkbox-${question.id}-${index}`} />
+                <Checkbox id={checkbox-${question.id}-${index}} />
                 <Input
                   value={option}
                   onChange={(e) => updateOption(question.id, index, e.target.value)}
                   className="flex-1"
-                  placeholder={`Opción ${index + 1}`}
+                  placeholder={Opción ${index + 1}}
                 />
               </div>
             ))}
@@ -128,12 +128,12 @@ export function Formulario() {
         return (
           <RadioGroup className="space-y-2 mt-2">
             <div className="flex items-center space-x-2">
-              <RadioGroupItem value="true" id={`true-${question.id}`} />
-              <Label htmlFor={`true-${question.id}`}>Verdadero</Label>
+              <RadioGroupItem value="true" id={true-${question.id}} />
+              <Label htmlFor={true-${question.id}}>Verdadero</Label>
             </div>
             <div className="flex items-center space-x-2">
-              <RadioGroupItem value="false" id={`false-${question.id}`} />
-              <Label htmlFor={`false-${question.id}`}>Falso</Label>
+              <RadioGroupItem value="false" id={false-${question.id}} />
+              <Label htmlFor={false-${question.id}}>Falso</Label>
             </div>
           </RadioGroup>
         );
@@ -183,7 +183,7 @@ export function Formulario() {
                       <Input
                         value={question.question}
                         onChange={(e) => updateQuestion(question.id, 'question', e.target.value)}
-                        placeholder={`Pregunta ${index + 1}`}
+                        placeholder={Pregunta ${index + 1}}
                         className="text-lg font-semibold pl-10 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                       />
                     </div>

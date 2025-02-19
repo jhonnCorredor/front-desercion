@@ -19,6 +19,7 @@ import SignIn from "./pages/auth/sign-in";
 import { SignUp } from "./pages/auth";
 import Formulario from "./pages/dashboard/form-builder-and-response";
 import TableRolView from "./pages/dashboard/rol_view";
+import Aprendiz from "./pages/dashboard/Aprendiz";
 import QuestionnaireForm from "./pages/dashboard/questionarie-form";
 
 
@@ -116,6 +117,12 @@ export const routes = [
         name: "Notificaciones",
         path: "/notifications",
         element: <Notifications />,
+      },
+
+      {
+        name: "Aprendices",
+        path: "/aprendices",
+        element: <Aprendiz />,
       },
 {
   name: "Cuestioanrios",
