@@ -23,17 +23,38 @@ export function Formulario() {
         nombre: title,
         descripcion: description,
         usuario: Cookies.get('user')
-      })
+      });
       console.log('Cuestionario guardado:', cuestionario);
+  
+      if (cuestionario) {
+        const preguntas = await Promise.all(questions.map(async (q, index) => {
+          console.log('Guardando pregunta', q);
+
+          const preguntaData = {
+            cuestionario: cuestionario.id,
+            texto: q.question,
+            tipo: q.type,
+            opciones: q.type === "seleccion multiple" ? q.options : {}
+          };
+  
+          const pregunta = await Service.post('/pregunta/', preguntaData);
+          console.log('Pregunta guardada:', pregunta);
+  
+          return pregunta;
+        }));
+        
+        console.log('Preguntas guardadas:', preguntas);
+      }
     } catch (error) {
       console.error("Error al guardar el formulario:", error);
     }
-  }
+  };
+  
 
   const addQuestion = () => {
     const newQuestion = {
       id: Date.now().toString(),
-      type: 'multiple',
+      type: 'seleccion multiple',
       question: '',
       options: ['']
     };
@@ -71,17 +92,17 @@ export function Formulario() {
     switch (question.type) {
       case 'abierta':
         return <Input disabled placeholder="Texto de respuesta corta" className="mt-2 bg-gray-100" />;
-      case 'multiple':
+      case 'seleccion multiple':
         return (
           <RadioGroup className="space-y-2 mt-2">
             {question.options.map((option, index) => (
               <div key={index} className="flex items-center space-x-2">
-                <RadioGroupItem value={`option-${index}`} id={`option-${question.id}-${index}`} />
+                <RadioGroupItem value={option-${index}} id={option-${question.id}-${index}} />
                 <Input
                   value={option}
                   onChange={(e) => updateOption(question.id, index, e.target.value)}
                   className="flex-1"
-                  placeholder={`Opción ${index + 1}`}
+                  placeholder={Opción ${index + 1}}
                 />
               </div>
             ))}
@@ -92,12 +113,12 @@ export function Formulario() {
           <div className="space-y-2 mt-2">
             {question.options.map((option, index) => (
               <div key={index} className="flex items-center space-x-2">
-                <Checkbox id={`checkbox-${question.id}-${index}`} />
+                <Checkbox id={checkbox-${question.id}-${index}} />
                 <Input
                   value={option}
                   onChange={(e) => updateOption(question.id, index, e.target.value)}
                   className="flex-1"
-                  placeholder={`Opción ${index + 1}`}
+                  placeholder={Opción ${index + 1}}
                 />
               </div>
             ))}
@@ -107,12 +128,12 @@ export function Formulario() {
         return (
           <RadioGroup className="space-y-2 mt-2">
             <div className="flex items-center space-x-2">
-              <RadioGroupItem value="true" id={`true-${question.id}`} />
-              <Label htmlFor={`true-${question.id}`}>Verdadero</Label>
+              <RadioGroupItem value="true" id={true-${question.id}} />
+              <Label htmlFor={true-${question.id}}>Verdadero</Label>
             </div>
             <div className="flex items-center space-x-2">
-              <RadioGroupItem value="false" id={`false-${question.id}`} />
-              <Label htmlFor={`false-${question.id}`}>Falso</Label>
+              <RadioGroupItem value="false" id={false-${question.id}} />
+              <Label htmlFor={false-${question.id}}>Falso</Label>
             </div>
           </RadioGroup>
         );
@@ -122,7 +143,7 @@ export function Formulario() {
   };
 
   return (
-    <div className="min-h bg-gray-50 rounded-xl mt-6">
+    <div className="min-h-screen bg-gray-50 rounded-xl mt-6">
 <div className="container mx-auto p-4 rounded-">
           {/* Header with SENA logo */}
         <div className="flex items-center space-x-3 mb-8">
@@ -162,7 +183,7 @@ export function Formulario() {
                       <Input
                         value={question.question}
                         onChange={(e) => updateQuestion(question.id, 'question', e.target.value)}
-                        placeholder={`Pregunta ${index + 1}`}
+                        placeholder={Pregunta ${index + 1}}
                         className="text-lg font-semibold pl-10 py-2 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                       />
                     </div>
@@ -175,7 +196,7 @@ export function Formulario() {
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="abierta">Respuesta corta</SelectItem>
-                        <SelectItem value="multiple">Selección múltiple</SelectItem>
+                        <SelectItem value="seleccion multiple">Selección múltiple</SelectItem>
                         <SelectItem value="casillas">Casillas de verificación</SelectItem>
                         <SelectItem value="verdadero_falso">Verdadero/Falso</SelectItem>
                       </SelectContent>
@@ -183,7 +204,7 @@ export function Formulario() {
                   </div>
                   {renderQuestionInput(question)}
                   <div className="flex justify-end space-x-2 mt-4">
-                    {['multiple', 'casillas'].includes(question.type) && (
+                    {['seleccion multiple', 'casillas'].includes(question.type) && (
                       <Button variant="outline" size="sm" onClick={() => addOption(question.id)} className=" text-green-600 hover:bg-green-50">
                         <Plus className="w-4 h-4 mr-1" /> Agregar opción
                       </Button>
@@ -199,10 +220,10 @@ export function Formulario() {
               </Card>
             ))}
 
-            <Button onClick={addQuestion} className="w-full py-2 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition-colors">
+            <Button onClick={addQuestion} className="w-full  py-2 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition-colors">
               <Plus className="w-4 h-4 mr-2" /> Agregar pregunta
             </Button>
-            <Button onClick={handleSubmit} className=" py-2   text-white font-semibold rounded-lg transition-colors">
+            <Button onClick={handleSubmit} className="w-full mt-4 py-2 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition-colors">
               <Plus className="w-4 h-4 mr-2" /> Guardar cuestionario
             </Button>
           </TabsContent>

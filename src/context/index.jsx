@@ -36,7 +36,7 @@ export function MaterialTailwindControllerProvider({ children }) {
     sidenavColor: "green",
     sidenavType: "white",
     transparentNavbar: true,
-    fixedNavbar: false,
+    fixedNavbar: true,
     openConfigurator: false,
   };
 

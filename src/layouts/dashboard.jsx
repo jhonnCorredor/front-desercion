@@ -55,6 +55,7 @@ export function Dashboard() {
       style={{
         backgroundColor: "#e5e5e5",
       }}
+
     >
       <Sidenav
         routes={menuDimanic? menuDimanic : routes}

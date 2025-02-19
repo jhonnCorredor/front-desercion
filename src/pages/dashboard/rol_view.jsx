@@ -170,12 +170,12 @@ estado : false,
     },
     {
       name: "Rol",
-      selector: (row) => dataRol.find((item) => item.value === row.rol_id)?.label,
+      selector: (row) => row.vista_rol,
       sortable: true,
     },
     {
       name: "Vista",
-      selector: (row) => dataVista.find((item) => item.value === row.vista_id)?.label,
+      selector: (row) => row.vista_nombre,
       sortable: true,
     },
     {
@@ -198,7 +198,7 @@ estado : false,
   ]
 
   return (
-    <div className="space-y-6">
+    <div className="mt-8 mb-8 space-y-6">
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-2xl font-bold">Permisos rutas</CardTitle>
@@ -221,6 +221,7 @@ estado : false,
         onSubmit={handleSubmit}
         title={selectedRow ? "Editar Ruta" : "Crear Nueva Ruta"}
         fields={modalFields}
+        initialData={selectedRow ? { ...selectedRow } : null}
       />
       {notification && (
         <div
