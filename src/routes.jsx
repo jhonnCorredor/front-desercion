@@ -7,7 +7,6 @@ import {
   RectangleStackIcon,
 } from "@heroicons/react/24/solid";
 import { Home, Profile, Notifications } from "@/pages/dashboard";
-import { SignIn, SignUp } from "@/pages/auth";
 import { element } from "prop-types";
 import ForgotPassword from "./pages/auth/ForgotPassword";
 import ResetPassword from "./pages/auth/ResetPassword";
@@ -16,6 +15,10 @@ import AccesUser from "./pages/dashboard/acces-users";
 import RolTable from "./pages/dashboard/Rol";
 import TableModule from "./pages/dashboard/module";
 import TableUser from "./pages/dashboard/user";
+import SignIn from "./pages/auth/sign-in";
+import { SignUp } from "./pages/auth";
+import Formulario from "./pages/dashboard/form-builder-and-response";
+import TableRolView from "./pages/dashboard/rol_view";
 
 
 const icon = {
@@ -93,6 +96,12 @@ export const routes = [
         element: <RolTable />,
       },
       {
+        icon: <TableCellsIcon {...icon} />,
+        name: "Rolvista",
+        path: "/RolView",
+        element: <TableRolView />,
+      },
+      {
         name: "Modulos",
         path: "/module",
         element: <TableModule  />,
@@ -103,12 +112,15 @@ export const routes = [
         element: <TableUser  />,
       },
       {
-        icon: <InformationCircleIcon {...icon} />,
-        name: "notifications",
+        name: "Notificaciones",
         path: "/notifications",
         element: <Notifications />,
       },
-
+{
+  name: "Cuestioanrios",
+  path: "/Cuestioanrios",
+  element: <Formulario />,
+}
     ],
   },
   {

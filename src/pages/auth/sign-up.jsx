@@ -1,7 +1,11 @@
 "use client"
 
 import { useState } from "react"
-import { Card, Input, Checkbox, Button, Typography, Alert, Select } from "@material-tailwind/react"
+import { Eye, EyeOff, Mail, User, FileText, Lock } from "lucide-react"
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
+import { Alert, AlertDescription } from "@/components/ui/alert"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Link } from "react-router-dom"
 import { Service } from "@/data/api"
 
@@ -11,11 +15,12 @@ export function SignUp() {
     nombres: "",
     apellidos: "",
     documento: "",
-    tipo_documento: "",
+    tipoDocumento: "",
     contrasena: "",
   })
   const [aceptaTerminos, setAceptaTerminos] = useState(false)
   const [notification, setNotification] = useState(null)
+  const [showPassword, setShowPassword] = useState(false)
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
@@ -25,122 +30,188 @@ export function SignUp() {
     e.preventDefault()
     if (!aceptaTerminos) {
       setNotification({
-        type: "red",
+        type: "error",
         message: "Debes aceptar los términos y condiciones para registrarte.",
       })
       return
     }
     try {
       const response = await Service.post("/usuario/", {
-        ...formData
-            })
+        ...formData,
+      })
       console.log("Registro exitoso:", response)
       setNotification({
-        type: "green",
+        type: "success",
         message: "Registro exitoso. Por favor, inicia sesión.",
       })
-      // Aquí puedes redirigir al usuario a la página de inicio de sesión
     } catch (error) {
       console.error("Error al registrarse:", error)
       setNotification({
-        type: "red",
+        type: "error",
         message: "Error al registrarse. Por favor, intenta de nuevo.",
       })
     }
   }
 
   return (
-    <Card className="w-96 mx-auto mt-20">
-      <form onSubmit={handleSubmit} className="p-8">
-        <div className="text-center mb-8">
-          <Typography variant="h3" className="font-bold">
-            Regístrate
-          </Typography>
-          <Typography variant="paragraph" color="blue-gray" className="mt-2">
-            Ingresa tus datos para crear una cuenta.
-          </Typography>
+    <div className="flex min-h-screen">
+      {/* Left side - Registration form */}
+      <div className="w-full lg:w-[580px] p-8 flex items-center justify-center bg-white">
+        <div className="w-full max-w-[480px] space-y-6">
+          {/* Logo */}
+          <div className="flex items-center space-x-2 mb-8">
+            <img src="/public/img/logoSena.jpg" alt="Logo SENA" className="h-12 w-12" />
+            <span className="text-2xl font-bold text-green-600">AutoGestion CIES</span>
+          </div>
+
+          <div className="space-y-2">
+            <h1 className="text-3xl font-bold text-gray-800">Crear Cuenta</h1>
+            <p className="text-sm text-gray-600">Ingresa tus datos para registrarte en la plataforma.</p>
+          </div>
+
+          {notification && (
+            <Alert variant={notification.type === "success" ? "default" : "destructive"}>
+              <AlertDescription>{notification.message}</AlertDescription>
+            </Alert>
+          )}
+
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="space-y-4">
+              <div className="relative">
+                <Mail className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+                <Input
+                  type="email"
+                  name="correo"
+                  placeholder="Correo electrónico"
+                  value={formData.correo}
+                  onChange={handleChange}
+                  className="pl-10"
+                  required
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="relative">
+                  <User className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+                  <Input
+                    name="nombres"
+                    placeholder="Nombres"
+                    value={formData.nombres}
+                    onChange={handleChange}
+                    className="pl-10"
+                    required
+                  />
+                </div>
+
+                <div className="relative">
+                  <User className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+                  <Input
+                    name="apellidos"
+                    placeholder="Apellidos"
+                    value={formData.apellidos}
+                    onChange={handleChange}
+                    className="pl-10"
+                    required
+                  />
+                </div>
+              </div>
+
+              <Select
+                name="tipoDocumento"
+                value={formData.tipoDocumento}
+                onValueChange={(value) => setFormData({ ...formData, tipoDocumento: value })}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Tipo de documento" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="1">Cédula de ciudadanía</SelectItem>
+                  <SelectItem value="2">Tarjeta de identidad</SelectItem>
+                </SelectContent>
+              </Select>
+
+              <div className="relative">
+                <FileText className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+                <Input
+                  name="documento"
+                  placeholder="Número de documento"
+                  value={formData.documento}
+                  onChange={handleChange}
+                  className="pl-10"
+                  required
+                />
+              </div>
+
+              <div className="relative">
+                <Lock className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+                <Input
+                  type={showPassword ? "text" : "password"}
+                  name="contrasena"
+                  placeholder="Contraseña"
+                  value={formData.contrasena}
+                  onChange={handleChange}
+                  className="pl-10"
+                  required
+                />
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  className="absolute right-2 top-2 h-8 w-8"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                </Button>
+              </div>
+            </div>
+
+            <div className="flex items-center space-x-2">
+              <input
+                type="checkbox"
+                id="terms"
+                checked={aceptaTerminos}
+                onChange={(e) => setAceptaTerminos(e.target.checked)}
+                className="rounded border-gray-300 text-green-600"
+              />
+              <label htmlFor="terms" className="text-sm text-gray-600">
+                Acepto los{" "}
+                <a href="#" className="text-green-600 hover:underline">
+                  términos y condiciones
+                </a>
+              </label>
+            </div>
+
+            <Button type="submit" className="w-full bg-green-600 hover:bg-green-700">
+              Crear Cuenta
+            </Button>
+
+            <p className="text-center text-sm text-gray-600">
+              ¿Ya tienes una cuenta?{" "}
+              <Link to="/auth/sign-in" className="text-green-600 hover:underline font-medium">
+                Inicia sesión
+              </Link>
+            </p>
+          </form>
         </div>
-        {notification && (
-          <Alert
-            color={notification.type}
-            dismissible={{
-              onClose: () => setNotification(null),
-            }}
-            className="mb-4"
-          >
-            {notification.message}
-          </Alert>
-        )}
-        <div className="mb-4 flex flex-col gap-6">
-          <Input
-            size="lg"
-            label="Correo electrónico"
-            name="correo"
-            value={formData.correo}
-            onChange={handleChange}
-            required
-          />
-          <Input size="lg" label="Nombres" name="nombres" value={formData.nombres} onChange={handleChange} required />
-          <Input
-            size="lg"
-            label="Apellidos"
-            name="apellidos"
-            value={formData.apellidos}
-            onChange={handleChange}
-            required
-          />
-          <select
-            label="Tipo de documento"
-            name="tipo_documento"
-            value={formData.tipo_documento}
-            onChange={handleChange}
-            required
-          >
-            <option value="CD">Cédula de ciudadanía</option>
-            <option value="TT">Tarjeta de identidad</option>
-          </select>
-          <Input
-            size="lg" 
-            label="Documento"
-            name="documento"
-            value={formData.documento}
-            onChange={handleChange}
-            required
-          />
-          <Input
-            type="password"
-            size="lg"
-            label="Contraseña"
-            name="contrasena"
-            value={formData.contrasena}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <Checkbox
-          label={
-            <Typography variant="small" color="gray" className="flex items-center font-normal">
-              Acepto los{" "}
-              <a href="#" className="font-medium transition-colors hover:text-gray-900">
-                &nbsp;términos y condiciones
-              </a>
-            </Typography>
-          }
-          containerProps={{ className: "-ml-2.5" }}
-          checked={aceptaTerminos}
-          onChange={(e) => setAceptaTerminos(e.target.checked)}
+      </div>
+
+      {/* Right side - Background with image and overlay */}
+      <div className="hidden lg:block lg:w-[calc(100%-480px)] relative overflow-hidden">
+        <img
+          src="/public/img/pexels-photo-924824.jpeg"
+          alt="Background"
+          className="absolute inset-0 w-full h-full object-cover"
         />
-        <Button type="submit" className="mt-6" fullWidth>
-          Registrarse
-        </Button>
-        <Typography variant="small" className="mt-6 flex justify-center">
-          ¿Ya tienes una cuenta?
-          <Link to="/auth/sign-in" className="ml-1 font-bold text-gray-900">
-            Inicia sesión
-          </Link>
-        </Typography>
-      </form>
-    </Card>
+
+        {/* Welcome text */}
+        <div className="absolute inset-0 bg-gradient-to-br from-green-600/80 to-green-800/80 flex items-center justify-center">
+          <div className="text-white text-center">
+            <h2 className="text-4xl font-bold mb-4">Bienvenido a AutoGestion CIES</h2>
+            <p className="text-xl">Tu plataforma de gestión educativa</p>
+          </div>
+        </div>
+      </div>
+    </div>
   )
 }
 
