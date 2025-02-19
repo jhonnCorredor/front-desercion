@@ -53,9 +53,9 @@ export function Dashboard() {
     <div
       className="min-h-screen"
       style={{
-        backgroundImage: "radial-gradient(circle, rgba(118, 255, 148, 0.45) 30%, rgba(82, 192, 89, 0.91) 100%)",
-        backgroundColor: "rgb(82 192 89 / 91%)",
+        backgroundColor: "#e5e5e5",
       }}
+
     >
       <Sidenav
         routes={menuDimanic? menuDimanic : routes}

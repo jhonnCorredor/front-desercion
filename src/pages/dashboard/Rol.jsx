@@ -179,7 +179,7 @@ export function TableRol() {
   ]
 
   return (
-    <div className="mt-24">
+    <div className="mt-8 mb-8 space-y-6">
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-2xl font-bold">Roles</CardTitle>

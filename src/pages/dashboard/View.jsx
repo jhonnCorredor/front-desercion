@@ -200,7 +200,7 @@ estado : false,
   ]
 
   return (
-    <div className="space-y-6">
+    <div className=" mt-8 mb-8 space-y-6">
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-2xl font-bold">Vistas</CardTitle>
@@ -223,6 +223,7 @@ estado : false,
         onSubmit={handleSubmit}
         title={selectedRow ? "Editar Vista" : "Crear Nueva Vista"}
         fields={modalFields}
+        initialData={selectedRow ? { ...selectedRow } : null}
       />
       {notification && (
         <div

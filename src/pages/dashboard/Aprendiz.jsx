@@ -9,10 +9,8 @@ import { CheckIcon, PlusIcon, TrashIcon } from "lucide-react"
 import { DynamicModal } from "@/widgets/Modal/DynamicModal"
 import Swal from "sweetalert2"
 
-export function TableRolView() {
+export function Aprendiz() {
   const [data, setData] = useState([])
-  const [dataRol, setDataRol] = useState([])
-  const [dataVista, setDataVista] = useState([])
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedRow, setSelectedRow] = useState(null)
   
@@ -24,7 +22,7 @@ export function TableRolView() {
     setIsLoading(true)
     setError(null)
     try {
-      const response = await Service.get("/rolvista/")
+      const response = await Service.get("/aprendiz/")
       setData(response || [])
     } catch (error) {
       console.error("Error al obtener los usuarios:", error)
@@ -35,39 +33,8 @@ export function TableRolView() {
     }
   }, [])
 
-  const fetchRol = async () => {
-    try {
-      const response = await Service.get("/rol/")
-
-      setDataRol(response.map((item) => ({
-        value: item.id,
-        label: item.nombre,
-      }))
-      )
-    } catch (error) {
-      console.error("Error al obtener los roles:", error)
-      setTipoDocumento([])
-    }
-  }
-
-  const fetchVista = async () => {
-    try {
-        const response = await Service.get("/vistas/")
-        setDataVista(response.map((item) => ({
-            value: item.id,
-            label: item.nombre,
-            }))
-            )
-    } catch (error) {
-        console.error("Error al obtener las vistas:", error)
-        setTipoDocumento([])
-    }
-  }
-
   useEffect(() => {
     fetchData()
-    fetchRol()
-    fetchVista()
   }, [fetchData])
 
   const handleAction = (row) => {
@@ -91,74 +58,81 @@ export function TableRolView() {
       setIsLoading(true)
       setError(null)
       if (selectedRow) {
-        await Service.put(`/rolvista/${selectedRow.id}`, formData)
+        await Service.put(`/aprendiz/${selectedRow.id}/`, formData)
+
         Swal.fire({
-                    title: "Ruta actualizada",
-                    icon: "success",
-                    showConfirmButton: false,
-                    timer: 1500,
-                })
+            title: "Aprendiz actualizado",
+            icon: "success",
+            showConfirmButton: false,
+            timer: 1500,
+        })
       } else {
-        await Service.post("/rolvista/", formData, {
+        await Service.post("/aprendiz/", formData, {
 estado : false,
         })
-        Swal.fire({
-                    title: "Ruta creada",
-                    icon: "success",
-                    showConfirmButton: false,
-                    timer: 1500,
-                })
 
+        Swal.fire({
+            title: "Aprendiz creado",
+            icon: "success",
+            showConfirmButton: false,
+            timer: 1500,
+        })
 
       }
       await fetchData()
       handleCloseModal()
     } catch (error) {
-        showNotification("red", "Error al enviar el correo. Por favor, intenta de nuevo.");
+        Swal.fire({
+            title: "Error al guardar el aprendiz",
+            text: error,
+            icon: "error",
+            showConfirmButton: false,
+            timer: 1500,
+        })
     } finally {
       setIsLoading(false)
     }
   }
 
-    const handleDelete = async (row) => {
-      try {
-          Swal.fire({
-              title: "¿Estás seguro de eliminar este ruta?",
-              text: "Esta acción no se puede deshacer.",
-              icon: "warning",
-              showCancelButton: true,
-              confirmButtonColor: "#d33",
-              cancelButtonColor: "#3085d6",
-              confirmButtonText: "Sí, eliminar",
-              cancelButtonText: "Cancelar",
-              reverseButtons: true,
-          }).then(async (result) => {
-              if (result.isConfirmed) {
-                  await Service.delete(`/rolvista/${row.id}/`)
-                  Swal.fire({
-                      title: "Ruta eliminado",
-                      icon: "success",
-                      showConfirmButton: false,
-                      timer: 1500,
-                  })
-                  await fetchData()
-              }
-          })
-      } catch (error) {
-          Swal.fire({
-              title: "Error al eliminar el ruta",
-              text: error,
-              icon: "error",
-              showConfirmButton: false,
-              timer: 1500,
-          })
-      }
+  const handleDelete = async (row) => {
+    try {
+        Swal.fire({
+            title: "¿Estás seguro de eliminar este aprendiz?",
+            text: "Esta acción no se puede deshacer.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "Sí, eliminar",
+            cancelButtonText: "Cancelar",
+            reverseButtons: true,
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                await Service.delete(`/aprendiz/${row.id}/`)
+                Swal.fire({
+                    title: "Aprendiz eliminado",
+                    icon: "success",
+                    showConfirmButton: false,
+                    timer: 1500,
+                })
+                await fetchData()
+            }
+        })
+    } catch (error) {
+        Swal.fire({
+            title: "Error al eliminar el aprendiz",
+            text: error,
+            icon: "error",
+            showConfirmButton: false,
+            timer: 1500,
+        })
     }
-  
+  }
 
   const modalFields = [
-    { name: "rol_id", label: "Rol", type: "select", options: dataRol },
-    { name: "vista_id", label: "Vista", type: "select", options: dataVista },
+    { name: "nombres", label: "nombres", type: "text" },
+    { name: "apellidos", label: "apellidos", type: "text" },
+    { name : "documento", label: "documento", type: "text"},
   ]
 
   const columns = [
@@ -169,15 +143,20 @@ estado : false,
       omit: true,
     },
     {
-      name: "Rol",
-      selector: (row) => row.vista_rol,
+      name: "nombres",
+      selector: (row) => row.nombres,
       sortable: true,
     },
     {
-      name: "Vista",
-      selector: (row) => row.vista_nombre,
+      name: "apellidos",
+      selector: (row) => row.apellidos,
       sortable: true,
     },
+    {
+      name: "documento",
+      selector: (row) => row.documento,
+      sortable: true,
+    },  
     {
       name: "Acciones",
       cell: (row) => (
@@ -201,10 +180,10 @@ estado : false,
     <div className="mt-8 mb-8 space-y-6">
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-2xl font-bold">Permisos rutas</CardTitle>
+          <CardTitle className="text-2xl font-bold">Gestión de Aprendices</CardTitle>
           <Button variant="default" size="sm" className="flex items-center gap-2" onClick={() => setIsModalOpen(true)}>
             <PlusIcon className="h-4 w-4" />
-            Agregar Nueva Ruta
+            Agregar Nuevo Aprendiz
           </Button>
         </CardHeader>
         <CardContent>
@@ -219,7 +198,7 @@ estado : false,
         isOpen={isModalOpen}
         onClose={handleCloseModal}
         onSubmit={handleSubmit}
-        title={selectedRow ? "Editar Ruta" : "Crear Nueva Ruta"}
+        title={selectedRow ? "Editar Modulo" : "Crear Nuevo Modulo"}
         fields={modalFields}
         initialData={selectedRow ? { ...selectedRow } : null}
       />
@@ -238,5 +217,6 @@ estado : false,
   )
 }
 
-export default TableRolView
+
+export default Aprendiz
 

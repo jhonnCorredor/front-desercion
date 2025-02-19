@@ -76,7 +76,7 @@ export function Sidenav({ brandImg, brandName, routes }) {
               </li>
             )}
             {pages.map(({ icon, name, path, children }) => (
-              <li key={name}>
+              <li  key={name}>
                 {children ? (
                   <>
                     <Button
@@ -103,7 +103,7 @@ export function Sidenav({ brandImg, brandName, routes }) {
                     {expandedMenus[name] && (
                       <ul className="pl-8 mt-2">
                         {children.map(({ icon, name, path }) => (
-                          <li key={name}>
+                          <li className="mt-1" key={name}>
                             <NavLink to={`/${layout}${path}`}>
                               {({ isActive }) => (
                                 <Button
