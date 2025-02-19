@@ -9,11 +9,26 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Plus, Trash2, Copy, Image, Mail } from 'lucide-react';
+import { Service } from '@/data/api';
+import Cookies from 'js-cookie';
 
 export function Formulario() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [questions, setQuestions] = useState([]);
+
+  const handleSubmit = async () => {
+    try {
+      const cuestionario = await Service.post('/cuestionario/', {
+        nombre: title,
+        descripcion: description,
+        usuario: Cookies.get('user')
+      })
+      console.log('Cuestionario guardado:', cuestionario);
+    } catch (error) {
+      console.error("Error al guardar el formulario:", error);
+    }
+  }
 
   const addQuestion = () => {
     const newQuestion = {
@@ -107,7 +122,7 @@ export function Formulario() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 rounded-xl mt-6">
+    <div className="min-h bg-gray-50 rounded-xl mt-6">
 <div className="container mx-auto p-4 rounded-">
           {/* Header with SENA logo */}
         <div className="flex items-center space-x-3 mb-8">
@@ -186,6 +201,9 @@ export function Formulario() {
 
             <Button onClick={addQuestion} className="w-full py-2 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition-colors">
               <Plus className="w-4 h-4 mr-2" /> Agregar pregunta
+            </Button>
+            <Button onClick={handleSubmit} className=" py-2   text-white font-semibold rounded-lg transition-colors">
+              <Plus className="w-4 h-4 mr-2" /> Guardar cuestionario
             </Button>
           </TabsContent>
           <TabsContent value="responses">
