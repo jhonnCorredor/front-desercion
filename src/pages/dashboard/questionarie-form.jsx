@@ -76,11 +76,8 @@ export default function QuestionnaireForm() {
     e.preventDefault();
     try {
         const data = answers.map(a => ({ pregunta: a.questionId, respuesta: a.value, usuario: parseInt(userId) , aprendiz: 1 }));
-        // const response = await Service.post("/cuestionario/respuestas/", {
-        //     cuestionario: questionnaire.id,
-        //     respuestas: answers
-        // });
-        console.log("Respuestas enviadas:", data);
+        const response = await Service.post("/respuestas/", data);
+        console.log("Respuestas enviadas:", response);
         // Mostrar notificación
     } catch (error) {
         console.error("Error al enviar respuestas:", error);
