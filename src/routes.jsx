@@ -21,6 +21,7 @@ import Formulario from "./pages/dashboard/form-builder-and-response";
 import TableRolView from "./pages/dashboard/rol_view";
 import Aprendiz from "./pages/dashboard/Aprendiz";
 import QuestionnaireForm from "./pages/dashboard/questionarie-form";
+import SearchForm from "./pages/dashboard/Consultar";
 import QuestionnairePage from "./pages/dashboard/QuestionnairePage";
 
 
@@ -135,6 +136,13 @@ export const routes = [
   path: "/Formulario",
   element: <QuestionnairePage />,
 },
+
+
+{
+  name: "consultar",
+  path: "/consultar",
+  element: <SearchForm />,
+}
     ],
   },
   {
