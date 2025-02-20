@@ -12,6 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Textarea } from "@/components/ui/textarea"
+import Swal from "sweetalert2"
 
 export function Formulario() {
   const [title, setTitle] = useState("")
@@ -27,20 +28,21 @@ export function Formulario() {
       })
 
       if (cuestionario) {
-        await Promise.all(
-          questions.map(async (q) => {
-            const preguntaData = {
-              cuestionario: cuestionario.id,
-              texto: q.question,
-              tipo: q.type,
-              opciones: ["seleccion multiple", "casillas", "verdadero falso"].includes(q.type) ? q.options : {},
-              obligatoria: q.required || false,
-              puntaje: q.points || 0,
-              multiple: q.multipleAnswers || false,
-            }
-            return await Service.post("/pregunta/", preguntaData)
-          }),
-        )
+        const preguntasData = questions.map((q) => ({
+          cuestionario: cuestionario.id,
+          texto: q.question,
+          tipo: q.type,
+          opciones: ["seleccion multiple", "casillas", "verdadero falso"].includes(q.type) ? q.options : {},
+        }));
+  
+        await Service.post("/pregunta/", preguntasData );
+        
+        Swal.fire({
+                    title: "Formulario guardado",
+                    icon: "success",
+                    showConfirmButton: false,
+                    timer: 1500,
+                })
       }
     } catch (error) {
       console.error("Error al guardar el formulario:", error)
@@ -298,4 +300,3 @@ export function Formulario() {
 }
 
 export default Formulario
-
