@@ -9,8 +9,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { Mail } from "lucide-react";
 import { Service } from "@/data/api";
 import Cookies from "js-cookie";
+import { Input } from "@/components/ui/input";
+import Swal from "sweetalert2";
 
-export default function QuestionnaireForm() {
+export default function QuestionnaireForm({ questionnaireId }) {
     const userId = Cookies.get("user");
 
     const [questionnaire, setQuestionnaire] = useState({
@@ -22,9 +24,9 @@ export default function QuestionnaireForm() {
     const [answers, setAnswers] = useState([]);
 
     // Ejemplo de uso en fetchData
-    const fetchData = async () => {
+    const fetchData = async (id) => {
     try {
-        const response = await Service.get("/cuestionario/cuestionariosid/?cuestionario_id=4");
+        const response = await Service.get(`/cuestionario/cuestionariosid/?cuestionario_id=${id}`);
 
         // Mapear la response en el formato requerido
         const questionnaire = {
@@ -47,8 +49,10 @@ export default function QuestionnaireForm() {
 };
 
     useEffect(() => {
-        fetchData();
-    }, []); // Solo se ejecuta al montar el componente
+        if (questionnaireId) {
+            fetchData(questionnaireId);
+        }
+    }, [questionnaireId]); // Solo se ejecuta al montar el componente
 
 //   const questionnaire = {
 //     id: 1,
@@ -77,10 +81,22 @@ export default function QuestionnaireForm() {
     try {
         const data = answers.map(a => ({ pregunta: a.questionId, respuesta: a.value, usuario: parseInt(userId) , aprendiz: 1 }));
         const response = await Service.post("/respuestas/", data);
-        console.log("Respuestas enviadas:", response);
-        // Mostrar notificación
+        
+        Swal.fire({
+            title: "Respuestas enviadas",
+            icon: "success",
+            showConfirmButton: false,
+            timer: 1500,
+        });
     } catch (error) {
         console.error("Error al enviar respuestas:", error);
+        Swal.fire({
+            title: "Error",
+            text: "No se pudieron enviar las respuestas. Por favor, inténtalo de nuevo más tarde.",
+            icon: "error",
+            showConfirmButton: false,
+            timer: 1500,
+        });
     }
   };
 
@@ -98,7 +114,7 @@ export default function QuestionnaireForm() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 rounded-xl mt-6">
+    <div className="min-h-screen">
       <div className="mx-auto container p-4">
         <div className="mb-6 flex items-center gap-3">
           <img src="/public/img/logoSena.jpg" alt="Logo SENA" className="h-12 w-12 rounded-full" />
@@ -120,14 +136,14 @@ export default function QuestionnaireForm() {
                       <Label className="text-lg font-medium">{question.text}</Label>
                     </div>
 
-                    {question.tipo === "abierta" ? (
+                    {question.tipo === "respuesta larga" ? (
                       <Textarea
                         placeholder="Escribe tu respuesta aquí"
                         value={answers.find((a) => a.questionId === question.id)?.value || ""}
                         onChange={(e) => handleAnswerChange(question.id, e.target.value)}
                         className="min-h-[100px] w-full resize-none border-gray-200 focus:border-[#4CAF50] focus:ring-[#4CAF50]"
                       />
-                    ) : (
+                    ) : question.tipo === "seleccion multiple" ? (
                       <RadioGroup
                         value={answers.find((a) => a.questionId === question.id)?.value || ""}
                         onValueChange={(value) => handleAnswerChange(question.id, value)}
@@ -151,11 +167,52 @@ export default function QuestionnaireForm() {
                           </div>
                         ))}
                       </RadioGroup>
-                    )}
+                    ) : question.tipo === "respuesta corta" ? (
+                      <Input
+                        placeholder="Escribe tu respuesta aquí"
+                        value={answers.find((a) => a.questionId === question.id)?.value || ""}
+                        onChange={(e) => handleAnswerChange(question.id, e.target.value)}
+                        className=" w-full resize-none border-gray-200 focus:border-[#4CAF50] focus:ring-[#4CAF50]"
+                      />
+                    ) : question.tipo === "verdadero falso" ? (
+                        <RadioGroup
+                            value={answers.find((a) => a.questionId === question.id)?.value || ""}
+                            onValueChange={(value) => handleAnswerChange(question.id, value)}
+                            className="space-y-2"
+                        >
+                            <div
+                            className={`flex items-center space-x-2 rounded-lg border p-4 transition-colors hover:bg-gray-50 ${
+                                answers.find((a) => a.questionId === question.id)?.value === "Verdadero" ? "border-[#4CAF50] bg-green-50" : ""
+                            }`}
+                            >
+                            <RadioGroupItem
+                                value="Verdadero"
+                                id={`q${question.id}-opt1`}
+                                className="border-gray-300 text-[#4CAF50] focus:ring-[#4CAF50]"
+                            />
+                            <Label htmlFor={`q${question.id}-opt1`} className="flex-1 cursor-pointer">
+                                Verdadero
+                            </Label>
+                            </div>
+                            <div
+                            className={`flex items-center space-x-2 rounded-lg border p-4 transition-colors hover:bg-gray-50 ${
+                                answers.find((a) => a.questionId === question.id)?.value === "Falso" ? "border-[#4CAF50] bg-green-50" : ""
+                            }`}
+                            >
+                            <RadioGroupItem
+                                value="Falso"
+                                id={`q${question.id}-opt2`}
+                                className="border-gray-300 text-[#4CAF50] focus:ring-[#4CAF50]"
+                            />
+                            <Label htmlFor={`q${question.id}-opt2`} className="flex-1 cursor-pointer">
+                                Falso
+                            </Label>
+                            </div>
+                        </RadioGroup>
+                    ) : null }
                   </CardContent>
                 </Card>
-              ))}
-
+              ))} 
               <Button type="submit" className="w-full bg-[#4CAF50] hover:bg-[#45a049]">
                 Enviar respuestas
               </Button>
