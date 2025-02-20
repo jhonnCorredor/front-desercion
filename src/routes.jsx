@@ -21,6 +21,7 @@ import Formulario from "./pages/dashboard/form-builder-and-response";
 import TableRolView from "./pages/dashboard/rol_view";
 import Aprendiz from "./pages/dashboard/Aprendiz";
 import QuestionnaireForm from "./pages/dashboard/questionarie-form";
+import SearchForm from "./pages/dashboard/Consultar";
 
 
 const icon = {
@@ -134,6 +135,13 @@ export const routes = [
   path: "/Formulario",
   element: <QuestionnaireForm />,
 },
+
+
+{
+  name: "consultar",
+  path: "/consultar",
+  element: <SearchForm />,
+}
     ],
   },
   {
