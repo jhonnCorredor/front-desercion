@@ -116,7 +116,7 @@ console.log(response + " success");
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 mt-6 lg:px-8 bg-gradient-to-br from-blue-gray-50 mt-12 rounded-xl min-h-screen via-white to-white">
       <Card className="mx-auto max-w-6xl shadow-xl">
         <CardHeader floated={false} className="h-80 bg-gradient-to-r black">
           <div className="absolute inset-0 h-full w-full bg-black/50" />

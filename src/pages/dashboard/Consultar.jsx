@@ -1,74 +1,98 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { useForm } from "react-hook-form"
-import Swal from "sweetalert2"
-import { Search, UserX, X } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Service } from "@/data/api"
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import Swal from "sweetalert2";
+import { Search, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Service } from "@/data/api";
+import AprendizModal from "./AprendizModal";
 
 export default function SearchForm() {
-  const [aprendiz, setAprendiz] = useState(null)
-  const [isLoading, setIsLoading] = useState(false)
+  const [aprendiz, setAprendiz] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [documentoBuscado, setDocumentoBuscado] = useState("");
 
   const form = useForm({
     defaultValues: {
       documento: "",
     },
-  })
+  });
 
   const validateDocument = (value) => {
-    if (!value) {
-      return "El documento es requerido"
-    }
-    if (value.length > 10) {
-      return "Máximo 10 caracteres"
-    }
-    return true
-  }
+    if (!value) return "El documento es requerido";
+    if (value.length > 10) return "Máximo 10 caracteres";
+    return true;
+  };
 
   async function onSubmit(values) {
-    setIsLoading(true)
+    setIsLoading(true);
+    setDocumentoBuscado(values.documento);
+
     Swal.fire({
       title: "Buscando...",
       allowOutsideClick: false,
       didOpen: () => {
-        Swal.showLoading()
+        Swal.showLoading();
       },
-    })
+    });
 
     try {
-      await new Promise((resolve) => setTimeout(resolve, 2000))
+      await new Promise((resolve) => setTimeout(resolve, 2000));
 
-      const response = await Service.get(`aprendiz/documento/?documento=${values.documento}`)
+      const response = await Service.get(`aprendiz/documento/?documento=${values.documento}`);
 
-      if (!response) {
-        throw new Error("Aprendiz no encontrado")
-      }
+      if (!response) throw new Error("Aprendiz no encontrado");
 
-      setAprendiz(response)
-      Swal.close()
+      setAprendiz(response);
+      Swal.close();
     } catch (error) {
-      console.error("Error al buscar aprendiz:", error)
       Swal.fire({
         icon: "error",
-        title: "Error",
-        text: "No se encontró el aprendiz o hubo un problema en la búsqueda",
-      })
-      setAprendiz(null)
+        title: "Aprendiz no encontrado",
+        text: "¿Deseas crearlo?",
+        showCancelButton: true,
+        confirmButtonText: "Crear",
+        cancelButtonText: "Cancelar",
+         confirmButtonColor: "#3085d6", // Color para el botón de "Crear"
+  cancelButtonColor: "#d33"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          console.log("Abriendo modal...");
+          setIsModalOpen(true);
+        }
+      });
+      setAprendiz(null);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
   }
 
   const handleClear = () => {
-    form.reset()
-    setAprendiz(null)
-  }
+    form.reset();
+    setAprendiz(null);
+  };
+
+  // Al crearse el aprendiz, se vuelve a consultar para obtener la información completa
+  const handleAprendizCreado = async (nuevoAprendiz) => {
+    try {
+      const response = await Service.get(`aprendiz/documento/?documento=${documentoBuscado}`);
+      setAprendiz(response);
+    } catch (error) {
+      console.error("Error al consultar el aprendiz creado:", error);
+    } finally {
+      setIsModalOpen(false);
+    }
+  };
+
+  const handleCloseModal = (open) => {
+    if (!open) setIsModalOpen(false);
+  };
 
   return (
     <div className="min-h mt-6 rounded-xl bg-gray-50 p-8">
@@ -117,37 +141,55 @@ export default function SearchForm() {
           </Form>
 
           {aprendiz && (
-            <div className="mt-8 space-y-6 animate-fadeIn">
-              <div className="flex items-center space-x-6">
-                <Avatar className="w-24 h-24">
-                  <AvatarImage src={aprendiz.avatarUrl || "/placeholder.svg"} alt={aprendiz.nombres} />
-                  <AvatarFallback>
-                    {aprendiz.nombres[0]}
-                    {aprendiz.apellidos[0]}
-                  </AvatarFallback>
-                </Avatar>
-                <div>
-                  <h2 className="text-2xl font-bold">{`${aprendiz.nombres} ${aprendiz.apellidos}`}</h2>
-                  <p className="text-gray-600">Documento: {aprendiz.documento}</p>
-                </div>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <h3 className="font-semibold text-gray-700">Tipo de Documento:</h3>
-                  <p>{aprendiz.tipoDocumento_nombre}</p>
-                </div>
-              
-                {/* Add more fields as needed */}
-              </div>
-              <Button className="w-full bg-green-600 hover:bg-green-700 text-white transition-all duration-300 ease-in-out transform hover:scale-105">
-                <UserX className="h-5 w-5 mr-2" />
-                Desercionar Aprendiz
-              </Button>
-            </div>
+         <div className="mt-8 animate-fadeIn">
+         <div className="bg-white rounded-lg shadow p-6 flex flex-col md:flex-row items-center">
+           {/* Avatar */}
+           <div className="flex-shrink-0">
+             <Avatar className="w-24 h-24">
+               <AvatarImage src={aprendiz.avatarUrl} alt={aprendiz.nombres} />
+               <AvatarFallback>
+                 {aprendiz.nombres[0]}{aprendiz.apellidos[0]}
+               </AvatarFallback>
+             </Avatar>
+           </div>
+       
+           {/* Datos del Aprendiz */}
+           <div className="mt-4 md:mt-0 md:ml-6 flex-grow">
+             <h2 className="text-2xl font-bold">{`${aprendiz.nombres} ${aprendiz.apellidos}`}</h2>
+             <ul className="mt-2 space-y-1">
+               <li className="text-gray-600">
+                 <span className="font-semibold">Documento:</span> {aprendiz.documento}
+               </li>
+               <li className="text-gray-600">
+                 <span className="font-semibold">Tipo Documento:</span> {aprendiz.tipoDocumento_nombre}
+               </li>
+               <li className="text-gray-600">
+                 <span className="font-semibold">Correo:</span> {aprendiz.correo}
+               </li>
+               
+             </ul>
+           </div>
+       
+           {/* Botón de Acción */}
+           <div className="mt-4 md:mt-0">
+             <button className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded">
+               Desertar
+             </button>
+           </div>
+         </div>
+       </div>
+       
           )}
         </CardContent>
       </Card>
-    </div>
-  )
-}
 
+      {/* Modal de creación */}
+      <AprendizModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        onAprendizCreado={handleAprendizCreado}
+        initialData={{ documento: documentoBuscado }}
+      />
+    </div>
+  );
+}

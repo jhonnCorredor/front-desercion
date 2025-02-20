@@ -17,13 +17,21 @@ import { useMaterialTailwindController, setOpenConfigurator, setOpenSidenav } fr
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { Service } from "@/data/api";
+import routes from "@/routes";
 
 export function DashboardNavbar() {
   const [controller, dispatch] = useMaterialTailwindController();
   const { fixedNavbar, openSidenav } = controller;
   const { pathname } = useLocation();
-  const [layout, page] = pathname.split("/").filter(Boolean);
   const [user, setUser] = useState(null);
+
+  const pathSegments = pathname.split("/").filter(Boolean)
+  const layout = pathSegments[0]
+  const currentPath = `/${pathSegments.slice(1).join("/")}`.toLowerCase()
+
+  const dashboardRoutes = routes.find((route) => route.layout.toLowerCase() === layout.toLowerCase())
+  const currentPage = dashboardRoutes?.pages.find((page) => page.path.toLowerCase() === currentPath)
+  const pageName = currentPage ? currentPage.name : "Pagina desconocida"
 
   useEffect(() => {
     const userId = Cookies.get("user");
@@ -50,11 +58,11 @@ export function DashboardNavbar() {
               </Typography>
             </Link>
             <Typography variant="small" color="blue-gray" className="font-normal">
-              {page}
+              {pageName}
             </Typography>
           </Breadcrumbs>
           <Typography variant="h6" color="blue-gray">
-            {page}
+            {pageName}
           </Typography>
         </div>
         <div className="flex items-center">

@@ -10,6 +10,7 @@ import {
 import { routes} from "@/routes";
 import { useMaterialTailwindController, setOpenConfigurator } from "@/context";
 import Cookies from "js-cookie";
+import { HomeIcon } from "lucide-react";
 
 export function Dashboard() {
   const [controller, dispatch] = useMaterialTailwindController();
@@ -44,7 +45,12 @@ export function Dashboard() {
     {
     title: "Pagina principal",
     layout: "dashboard",
-    pages: mappedData
+    pages:[ 
+      {
+        name: "Inicio",
+        path: "/home",
+      },
+      ...mappedData] 
     }
   ]
   }

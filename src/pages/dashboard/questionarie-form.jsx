@@ -20,7 +20,7 @@ export default function QuestionnaireForm({ questionnaireId }) {
         nombre: "",
         descripcion: "",
         preguntas: []
-    });    
+    });     
     const [answers, setAnswers] = useState([]);
 
     // Ejemplo de uso en fetchData
@@ -33,12 +33,12 @@ export default function QuestionnaireForm({ questionnaireId }) {
             id: response[0]?.cuestionario_id || null,
             nombre: response[0]?.cuestionario_nombre || "",
             descripcion: response[0]?.cuestionario_descripcion || "",
-            preguntas: response.map(p => ({
+            preguntas: response[0]?.preguntas.map(p => ({
                 id: p.pregunta_id,
                 text: p.pregunta_texto,
                 tipo: p.pregunta_tipo,
                 opciones: JSON.parse(p.pregunta_opciones), // Convertir string a array
-                cuestionario: p.cuestionario_id
+                cuestionario: response[0]?.cuestionario_id
             }))
         };
         setQuestionnaire(questionnaire);
@@ -114,7 +114,7 @@ export default function QuestionnaireForm({ questionnaireId }) {
   };
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen mt-2">
       <div className="mx-auto container p-4">
         <div className="mb-6 flex items-center gap-3">
           <img src="/public/img/logoSena.jpg" alt="Logo SENA" className="h-12 w-12 rounded-full" />

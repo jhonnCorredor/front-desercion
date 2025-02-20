@@ -37,7 +37,7 @@ export default function QuestionnairePage() {
   }
 
   return (
-    <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full mt-12 rounded-xl min-h-screen bg-gray-50">
+    <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full bg-gradient-to-br from-blue-gray-50 mt-6 rounded-xl min-h-screen via-white to-white">
       <TabsList className="hidden">
         <TabsTrigger value="gallery">Galería</TabsTrigger>
         <TabsTrigger value="form">Formulario</TabsTrigger>
@@ -81,9 +81,9 @@ export default function QuestionnairePage() {
 
       <TabsContent value="form" className="m-0 ">
         {selectedId && (
-          <div className="bg-white min-h-screen rounded-xl">
+          <div className="bg-gradient-to-br from-blue-gray-50 mt-6 rounded-xl min-h-screen via-white to-white min-h-screen rounded-xl ">
             <div className="max-w-7xl mx-auto px-4">
-              <Button variant="ghost" className="my-6 hover:bg-gray-100" onClick={handleBack}>
+              <Button variant="ghost" className="mt-6 hover:bg-gray-100 h-12" onClick={handleBack}>
                 <ArrowLeft className="w-4 h-4 mr-2" />
                 Volver a cuestionarios
               </Button>

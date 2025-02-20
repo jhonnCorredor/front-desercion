@@ -82,36 +82,36 @@ export const routes = [
       },
       {
         icon: <TableCellsIcon {...icon} />,
-        name: "accesUser",
+        name: "Acceso de usuario",
         path: "/acces-user",
         element: <AccesUser />,
       },
       //Tablas 
       {
         icon: <TableCellsIcon {...icon} />,
-        name: "Vistas",
+        name: "Gestión de vista",
         path: "/view",
         element: <TableView  />,
       },
       {
         icon: <TableCellsIcon {...icon} />,
-        name: "Roels",
-        path: "/Rol",
+        name: "Gestion de roles",
+        path: "/rol",
         element: <RolTable />,
       },
       {
         icon: <TableCellsIcon {...icon} />,
-        name: "Rolvista",
-        path: "/RolView",
+        name: "Permisos de rutas",
+        path: "/rolview",
         element: <TableRolView />,
       },
       {
-        name: "Modulos",
+        name: "Gestión de modulos",
         path: "/module",
         element: <TableModule  />,
       },
       {
-        name: "Usuarios",
+        name: "Gestion de usuarios",
         path: "/user",
         element: <TableUser  />,
       },
@@ -122,18 +122,18 @@ export const routes = [
       },
 
       {
-        name: "Aprendices",
+        name: "Gestion de aprendices",
         path: "/aprendices",
         element: <Aprendiz />,
       },
 {
   name: "Cuestioanrios",
-  path: "/Cuestionarios",
+  path: "/cuestionarios",
   element: <Formulario />,
 },
 {
   name: "formulario",
-  path: "/Formulario",
+  path: "/formulario",
   element: <QuestionnairePage />,
 },
 

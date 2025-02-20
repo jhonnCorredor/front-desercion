@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react"
 import {
-  Card,
   Dialog,
   DialogHeader,
   DialogBody,
@@ -15,6 +14,8 @@ import { Button } from "@/components/ui/button"
 import DataTableComponent from "@/widgets/datatable/data-table"
 import { Service } from "@/data/api"
 import { CheckIcon, UserCircleIcon } from "lucide-react"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import Swal from "sweetalert2"
 
 export function AccesUser() {
   const [data, setData] = useState([])
@@ -78,7 +79,12 @@ export function AccesUser() {
       }
 
       await Service.post("/usuariorol/", DataAcces)
-      alert("Usuario autorizado.")
+      Swal.fire({
+                  title: "Usuario autorizado",
+                  icon: "success",
+                  showConfirmButton: false,
+                  timer: 1500,
+              })
       setSelectedRow(null)
       setSelectedRole("")
       await fetchData()
@@ -131,19 +137,21 @@ export function AccesUser() {
   ]
 
   return (
-    <div className="mt-8 mb-8 flex flex-col gap-12">
-      <Card>
+    
+    <div className="mt-6 mb-8 space-y-6 bg-gradient-to-br from-blue-gray-50 mt-12 rounded-xl min-h-screen via-white to-white">
+      <Card className="bg-gradient-to-br from-blue-gray-50 rounded-xl min-h-screen via-white to-white">
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardTitle className="text-2xl font-bold">Acceso de usuarios</CardTitle>
+        </CardHeader>
+        <CardContent>
         <DataTableComponent
           columns={columns}
           data={data}
-          title={"Acceso de usuarios"}
           loading={isLoading}
-          error={error}
-        />{" "}
+          error={error} />{" "}
         {/* Pass error state to DataTableComponent */}
-      </Card>
-
-      <Dialog open={showModal} handler={handleCloseModal} size="xs">
+      </CardContent>
+    </Card><Dialog open={showModal} handler={handleCloseModal} size="xs">
         <DialogHeader className="justify-center">
           <Typography variant="h5" color="blue-gray">
             Autorizar Usuario

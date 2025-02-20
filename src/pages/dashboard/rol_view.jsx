@@ -170,12 +170,12 @@ estado : false,
     },
     {
       name: "Rol",
-      selector: (row) => row.vista_rol,
+      selector: (row) => row.nombre_rol,
       sortable: true,
     },
     {
       name: "Vista",
-      selector: (row) => row.vista_nombre,
+      selector: (row) => row.nombre_vista,
       sortable: true,
     },
     {
@@ -198,8 +198,8 @@ estado : false,
   ]
 
   return (
-    <div className="mt-8 mb-8 space-y-6">
-      <Card>
+    <div className="mt-6 mb-8 space-y-6 bg-gradient-to-br from-blue-gray-50 mt-12 rounded-xl min-h-screen via-white to-white">
+      <Card className="bg-gradient-to-br from-blue-gray-50 rounded-xl min-h-screen via-white to-white">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-2xl font-bold">Permisos rutas</CardTitle>
           <Button variant="default" size="sm" className="flex items-center gap-2" onClick={() => setIsModalOpen(true)}>

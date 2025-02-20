@@ -52,7 +52,27 @@ export function Aprendiz() {
     setTimeout(() => setNotification(null), 5000)
   }
 
+  const [tipoDocumento, setTipoDocumento] = useState([])
 
+  const fetchTipoDocumento = async () => {
+    try {
+      const response = await Service.get("/documento/")
+
+      setTipoDocumento(response.map((item) => ({
+        value: item.id,
+        label: item.nombre,
+      }))
+      )
+    } catch (error) {
+      console.error("Error al obtener los tipos de documento:", error)
+      setTipoDocumento([])
+    }
+  }
+
+  useEffect(() => {
+    fetchData()
+    fetchTipoDocumento()
+  }, [fetchData])
   const handleSubmit = async (formData) => {
     try {
       setIsLoading(true)
@@ -133,6 +153,7 @@ estado : false,
     { name: "nombres", label: "nombres", type: "text" },
     { name: "apellidos", label: "apellidos", type: "text" },
     { name : "documento", label: "documento", type: "text"},
+    { name: "correo", label: "correo", type: "text" },
   ]
 
   const columns = [
@@ -158,6 +179,16 @@ estado : false,
       sortable: true,
     },  
     {
+      name: "correo",
+      selector: (row) => row.correo,
+      sortable: true,
+    },
+    {
+      name :"tipoDocumento",
+      selector: (row) => tipoDocumento.find((item) => item.value === row.tipoDocumento)?.label,
+      sortable: true,
+    },
+    {
       name: "Acciones",
       cell: (row) => (
         <div className="flex items-center gap-2">
@@ -177,8 +208,8 @@ estado : false,
   ]
 
   return (
-    <div className="mt-8 mb-8 space-y-6">
-      <Card>
+    <div className="mt-6 mb-8 space-y-6 ">
+      <Card className="bg-gradient-to-br from-blue-gray-50 rounded-xl min-h-screen via-white to-white">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-2xl font-bold">Gestión de Aprendices</CardTitle>
           <Button variant="default" size="sm" className="flex items-center gap-2" onClick={() => setIsModalOpen(true)}>
