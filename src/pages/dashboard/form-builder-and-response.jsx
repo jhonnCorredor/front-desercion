@@ -11,6 +11,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Plus, Trash2, Copy, Image, Mail } from 'lucide-react';
 import { Service } from '@/data/api';
 import Cookies from 'js-cookie';
+import Swal from 'sweetalert2';
 
 export function Formulario() {
   const [title, setTitle] = useState('');
@@ -24,12 +25,10 @@ export function Formulario() {
         descripcion: description,
         usuario: Cookies.get('user')
       });
-      console.log('Cuestionario guardado:', cuestionario);
   
       if (cuestionario) {
         const preguntas = await Promise.all(questions.map(async (q, index) => {
-          console.log('Guardando pregunta', q);
-
+          
           const preguntaData = {
             cuestionario: cuestionario.id,
             texto: q.question,
@@ -38,15 +37,23 @@ export function Formulario() {
           };
   
           const pregunta = await Service.post('/pregunta/', preguntaData);
-          console.log('Pregunta guardada:', pregunta);
-  
+          
           return pregunta;
         }));
         
-        console.log('Preguntas guardadas:', preguntas);
+        Swal.fire({
+          icon: 'success',
+          title: 'Cuestionario guardado',
+          text: 'El cuestionario ha sido guardado correctamente.'
+        });
       }
     } catch (error) {
       console.error("Error al guardar el formulario:", error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error al guardar cuestionario:',
+        text: error
+      });
     }
   };
   
@@ -90,7 +97,7 @@ export function Formulario() {
 
   const renderQuestionInput = (question) => {
     switch (question.type) {
-      case 'abierta':
+      case 'respuesta corta':
         return <Input disabled placeholder="Texto de respuesta corta" className="mt-2 bg-gray-100" />;
       case 'seleccion multiple':
         return (
@@ -108,23 +115,9 @@ export function Formulario() {
             ))}
           </RadioGroup>
         );
-      case 'casillas':
-        return (
-          <div className="space-y-2 mt-2">
-            {question.options.map((option, index) => (
-              <div key={index} className="flex items-center space-x-2">
-                <Checkbox id={`checkbox-${question.id}-${index}`} />
-                <Input
-                  value={option}
-                  onChange={(e) => updateOption(question.id, index, e.target.value)}
-                  className="flex-1"
-                  placeholder={`Opción ${index + 1}`}
-                />
-              </div>
-            ))}
-          </div>
-        );
-      case 'verdadero_falso':
+      case 'respuesta larga':
+        return <Textarea disabled placeholder="Texto de respuesta larga" className="min-h-[100px] mt-2 bg-gray-100" />
+      case 'verdadero falso':
         return (
           <RadioGroup className="space-y-2 mt-2">
             <div className="flex items-center space-x-2">
@@ -195,16 +188,16 @@ export function Formulario() {
                         <SelectValue placeholder="Tipo de pregunta" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="abierta">Respuesta corta</SelectItem>
+                        <SelectItem value="respuesta corta">Respuesta corta</SelectItem>
                         <SelectItem value="seleccion multiple">Selección múltiple</SelectItem>
-                        <SelectItem value="casillas">Casillas de verificación</SelectItem>
-                        <SelectItem value="verdadero_falso">Verdadero/Falso</SelectItem>
+                        <SelectItem value="respuesta larga">Respuesta larga</SelectItem>
+                        <SelectItem value="verdadero falso">Verdadero/Falso</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
                   {renderQuestionInput(question)}
                   <div className="flex justify-end space-x-2 mt-4">
-                    {['seleccion multiple', 'casillas'].includes(question.type) && (
+                    {['seleccion multiple'].includes(question.type) && (
                       <Button variant="outline" size="sm" onClick={() => addOption(question.id)} className=" text-green-600 hover:bg-green-50">
                         <Plus className="w-4 h-4 mr-1" /> Agregar opción
                       </Button>
