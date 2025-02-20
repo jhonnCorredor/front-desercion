@@ -156,7 +156,7 @@ export function Sidenav({ brandImg, brandName, routes }) {
                 <Typography
                   variant="small"
                   color={sidenavType === "dark" ? "white" : "blue-gray"}
-                  className="font-black uppercase opacity-75"
+                  className="font-black my-3 uppercase opacity-75"
                 >
                   Configuración
                 </Typography>

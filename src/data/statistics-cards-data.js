@@ -7,47 +7,47 @@ import {
 
 export const statisticsCardsData = [
   {
-    color: "gray",
-    icon: BanknotesIcon,
-    title: "Today's Money",
-    value: "$53k",
-    footer: {
-      color: "text-green-500",
-      value: "+55%",
-      label: "than last week",
-    },
-  },
-  {
-    color: "gray",
+    color: "green",
     icon: UsersIcon,
-    title: "Today's Users",
-    value: "2,300",
+    title: "registro de",
+    value: "Aprendices",
     footer: {
       color: "text-green-500",
-      value: "+3%",
-      label: "than last month",
+      value: "125.000.000",
+      label: "aprendices registrados",
     },
   },
   {
-    color: "gray",
-    icon: UserPlusIcon,
-    title: "New Clients",
-    value: "3,462",
-    footer: {
-      color: "text-red-500",
-      value: "-2%",
-      label: "than yesterday",
-    },
-  },
-  {
-    color: "gray",
+    color: "green",
     icon: ChartBarIcon,
-    title: "Sales",
-    value: "$103,430",
+    title: "registro de",
+    value: "Deserciones",
     footer: {
       color: "text-green-500",
-      value: "+5%",
-      label: "than yesterday",
+      value: "50",
+      label: "deserciones registradas",
+    },
+  },
+  {
+    color: "green",
+    icon: UserPlusIcon,
+    title: "registro de",
+    value: "deserciones sin aprobar",
+    footer: {
+      color: "text-green-500",
+      value: "20",
+      label: "registros",
+    },
+  },
+  {
+    color: "green",
+    icon: ChartBarIcon,
+    title: "Registro de",
+    value: "deserciones aprobadas",
+    footer: {
+      color: "text-green-500",
+      value: "30",
+      label: "registros",
     },
   },
 ];
