@@ -14,7 +14,6 @@ import Swal from "sweetalert2";
 
 export default function QuestionnaireForm({ questionnaireId }) {
     const userId = Cookies.get("user");
-    const aprendizId = Cookies.get("aprendiz")
 
     const [questionnaire, setQuestionnaire] = useState({
         id: null,
@@ -58,16 +57,8 @@ export default function QuestionnaireForm({ questionnaireId }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-        const data = answers.map(a => ({ pregunta: a.questionId, respuesta: a.value, usuario: parseInt(userId) , aprendiz: parseInt(aprendizId) }));
+        const data = answers.map(a => ({ pregunta: a.questionId, respuesta: a.value, usuario: parseInt(userId) }));
         const response = await Service.post("/respuestas/", data);
-
-        const dataProcess = {
-          estado_aprobacion: "instructor",
-          usuario_id: parseInt(userId),
-          cuestionario_id: questionnaire.id
-        }
-
-        const process = await Service.post("/proceso/", dataProcess)
         
         Cookies.remove("aprendiz")
         Swal.fire({

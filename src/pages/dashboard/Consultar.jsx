@@ -83,7 +83,6 @@ export default function SearchForm() {
   const handleProcess = (e) => {
     e.preventDefault()
     try {
-      console.log(aprendiz)
       Cookies.set("aprendiz", JSON.stringify(aprendiz.id) , {expires: 1})
       setTimeout(() => {
         window.location.href = "/dashboard/formulario"

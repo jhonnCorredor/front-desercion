@@ -8,11 +8,15 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 import QuestionnaireForm from "../../widgets/pages/questionarie-form"
 import { Button } from "@/components/ui/button"
 import Cookies from "js-cookie"
+import Swal from "sweetalert2"
 
 export default function QuestionnairePage() {
   const [questionnaires, setQuestionnaires] = useState([])
   const [activeTab, setActiveTab] = useState("gallery")
   const [selectedId, setSelectedId] = useState(null)
+
+  const userId = Cookies.get("user");
+  const aprendizId = Cookies.get("aprendiz")
 
   useEffect(() => {
     const fetchQuestionnaires = async () => {
@@ -27,10 +31,38 @@ export default function QuestionnairePage() {
     fetchQuestionnaires()
   }, [])
 
-  const handleCardClick = (id) => {
-    setSelectedId(id)
-    setActiveTab("form")
-  }
+  const handleCardClick = async (id) => {
+    const result = await Swal.fire({
+      title: "¿Realizar proceso?",
+      text: "Está seguro de realizar este proceso.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Sí, continuar",
+      cancelButtonText: "Cancelar",
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33"
+    });
+  
+    if (result.isConfirmed) {
+      try {
+        const dataProcess = {
+          estado_aprobacion: "instructor",
+          usuario_id: parseInt(userId),
+          cuestionario_id: id,
+          aprendiz: aprendizId
+        };
+  
+        const process = await Service.post("/proceso/", dataProcess);
+        
+        setSelectedId(id);
+        setActiveTab("form");
+      } catch (error) {
+        console.error("Error al realizar el proceso:", error);
+        Swal.fire("Error", "Hubo un problema al realizar el proceso.", "error");
+      }
+    }
+  };
+  
 
   const handleBack = () => {
     setActiveTab("gallery")
