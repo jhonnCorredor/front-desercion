@@ -76,7 +76,7 @@ export function TableView() {
       setIsLoading(true)
       setError(null)
       if (selectedRow) {
-        await Service.put(`/vistas/${selectedRow.id}`, formData)
+        await Service.put(`/vistas/${selectedRow.id}/`, formData)
         Swal.fire({
           title: "vista actualizada",
           icon: "success",
@@ -223,7 +223,7 @@ estado : false,
         onSubmit={handleSubmit}
         title={selectedRow ? "Editar Vista" : "Crear Nueva Vista"}
         fields={modalFields}
-        initialData={selectedRow ? { ...selectedRow } : null}
+        initialData={selectedRow ? {...selectedRow} : null}
       />
       {notification && (
         <div

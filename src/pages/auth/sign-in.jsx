@@ -25,6 +25,7 @@ export default function SignIn() {
       })
       Cookies.set("menu", JSON.stringify(response.vistas_rol), { expires: 1 })
       Cookies.set("user", response.usuario_id, { expires: 1 })
+      Cookies.set("rol", response.nombre_rol, {expires: 1})
       setTimeout(() => {
         window.location.href = "/dashboard/home"
       }, 1000)

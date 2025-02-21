@@ -64,7 +64,6 @@ export default function AprendizModal({ isOpen, onClose, onAprendizCreado, initi
         text: error.message || "Hubo un error al guardar el aprendiz",
         icon: "error",
         showConfirmButton: false,
-        timer: 1500,
       });
     } finally {
       setIsLoading(false);

@@ -44,6 +44,9 @@ export function SignUp() {
         type: "success",
         message: "Registro exitoso. Por favor, inicia sesión.",
       })
+      setTimeout(() => {
+        window.location.href = "/auth/sign-in"
+      }, 1000)
     } catch (error) {
       console.error("Error al registrarse:", error)
       setNotification({
