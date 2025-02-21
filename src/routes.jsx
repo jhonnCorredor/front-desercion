@@ -20,9 +20,9 @@ import { SignUp } from "./pages/auth";
 import Formulario from "./pages/dashboard/form-builder-and-response";
 import TableRolView from "./pages/dashboard/rol_view";
 import Aprendiz from "./pages/dashboard/Aprendiz";
-import QuestionnaireForm from "./pages/dashboard/questionarie-form";
 import SearchForm from "./pages/dashboard/Consultar";
 import QuestionnairePage from "./pages/dashboard/QuestionnairePage";
+import ProcessManagement from "./pages/dashboard/process-management";
 
 
 const icon = {
@@ -126,23 +126,26 @@ export const routes = [
         path: "/aprendices",
         element: <Aprendiz />,
       },
-{
-  name: "Cuestioanrios",
-  path: "/cuestionarios",
-  element: <Formulario />,
-},
-{
-  name: "formulario",
-  path: "/formulario",
-  element: <QuestionnairePage />,
-},
-
-
-{
-  name: "consultar",
-  path: "/consultar",
-  element: <SearchForm />,
-}
+      {
+        name: "Cuestioanrios",
+        path: "/cuestionarios",
+        element: <Formulario />,
+      },
+      {
+        name: "formulario",
+        path: "/formulario",
+        element: <QuestionnairePage />,
+      },
+      {
+        name: "consultar",
+        path: "/consultar",
+        element: <SearchForm />,
+      },
+      {
+        name: "process",
+        path: "/process",
+        element: <ProcessManagement />
+      },
     ],
   },
   {

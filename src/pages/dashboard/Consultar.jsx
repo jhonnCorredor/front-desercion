@@ -11,6 +11,8 @@ import { Form, FormControl, FormField, FormItem, FormMessage } from "@/component
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Service } from "@/data/api";
 import AprendizModal from "./AprendizModal";
+import { NavLink } from "react-router-dom";
+import Cookies from "js-cookie";
 
 export default function SearchForm() {
   const [aprendiz, setAprendiz] = useState(null);
@@ -77,6 +79,19 @@ export default function SearchForm() {
     form.reset();
     setAprendiz(null);
   };
+
+  const handleProcess = (e) => {
+    e.preventDefault()
+    try {
+      console.log(aprendiz)
+      Cookies.set("aprendiz", JSON.stringify(aprendiz.id) , {expires: 1})
+      setTimeout(() => {
+        window.location.href = "/dashboard/formulario"
+      }, 100)
+    } catch (error) {
+      console.error("Error al redirigir: ", error)
+    }
+  }
 
   // Al crearse el aprendiz, se vuelve a consultar para obtener la información completa
   const handleAprendizCreado = async (nuevoAprendiz) => {
@@ -172,9 +187,9 @@ export default function SearchForm() {
        
            {/* Botón de Acción */}
            <div className="mt-4 md:mt-0">
-             <button className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded">
-               Desertar
-             </button>
+             <NavLink  to="/dashboard/formulario" onClick={handleProcess} className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded">
+               Realizar procesos
+             </NavLink>
            </div>
          </div>
        </div>

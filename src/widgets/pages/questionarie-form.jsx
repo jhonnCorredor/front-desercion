@@ -14,6 +14,7 @@ import Swal from "sweetalert2";
 
 export default function QuestionnaireForm({ questionnaireId }) {
     const userId = Cookies.get("user");
+    const aprendizId = Cookies.get("aprendiz")
 
     const [questionnaire, setQuestionnaire] = useState({
         id: null,
@@ -48,46 +49,36 @@ export default function QuestionnaireForm({ questionnaireId }) {
     }
 };
 
-    useEffect(() => {
-        if (questionnaireId) {
-            fetchData(questionnaireId);
-        }
-    }, [questionnaireId]); // Solo se ejecuta al montar el componente
-
-//   const questionnaire = {
-//     id: 1,
-//     nombre: "Deserción",
-//     descripcion: "Formulario para deserción de aprendices",
-//     preguntas: [
-//       {
-//         id: 1,
-//         text: "¿Quiere desertar?",
-//         tipo: "abierta",
-//         opciones: [],
-//         cuestionario: 1,
-//       },
-//       {
-//         id: 2,
-//         text: "Motivo para desertar",
-//         tipo: "seleccion multiple",
-//         opciones: ["Porque si", "No le interesa"],
-//         cuestionario: 1,
-//       },
-//     ],
-//   };
+  useEffect(() => {
+      if (questionnaireId) {
+          fetchData(questionnaireId);
+      }
+  }, [questionnaireId]); // Solo se ejecuta al montar el componente
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-        const data = answers.map(a => ({ pregunta: a.questionId, respuesta: a.value, usuario: parseInt(userId) , aprendiz: 1 }));
+        const data = answers.map(a => ({ pregunta: a.questionId, respuesta: a.value, usuario: parseInt(userId) , aprendiz: parseInt(aprendizId) }));
         const response = await Service.post("/respuestas/", data);
+
+        const dataProcess = {
+          estado_aprobacion: "instructor",
+          usuario_id: parseInt(userId),
+          cuestionario_id: questionnaire.id
+        }
+
+        const process = await Service.post("/proceso/", dataProcess)
         
+        Cookies.remove("aprendiz")
         Swal.fire({
             title: "Respuestas enviadas",
             icon: "success",
             showConfirmButton: false,
             timer: 1500,
         });
+        setTimeout(() => {
+          window.location.href = "/dashboard/consultar"
+        }, 100)
     } catch (error) {
         console.error("Error al enviar respuestas:", error);
         Swal.fire({

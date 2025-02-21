@@ -5,8 +5,9 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Service } from "@/data/api"
 import { Users, ArrowLeft, ChevronRight } from "lucide-react"
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
-import QuestionnaireForm from "./questionarie-form"
+import QuestionnaireForm from "../../widgets/pages/questionarie-form"
 import { Button } from "@/components/ui/button"
+import Cookies from "js-cookie"
 
 export default function QuestionnairePage() {
   const [questionnaires, setQuestionnaires] = useState([])
@@ -36,6 +37,13 @@ export default function QuestionnairePage() {
     setSelectedId(null)
   }
 
+  const cancelProcess = () => {
+    Cookies.remove("aprendiz")
+    setTimeout(() => {
+      window.location.href = "/dashboard/consultar"
+    }, 100)
+  }
+
   return (
     <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full bg-gradient-to-br from-blue-gray-50 mt-6 rounded-xl min-h-screen via-white to-white">
       <TabsList className="hidden">
@@ -45,6 +53,10 @@ export default function QuestionnairePage() {
 
       <TabsContent value="gallery" className="m-0 p-6">
         <div className="max-w-6xl mx-auto">
+            <Button variant="ghost" className="mb-6 hover:bg-gray-100 h-12" onClick={cancelProcess}>
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                Cancelar proceso
+              </Button>
           <div className="flex items-center justify-between mb-8">
             <h1 className="text-3xl font-bold text-gray-900">Cuestionarios</h1>
           </div>
