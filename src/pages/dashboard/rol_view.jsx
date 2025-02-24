@@ -135,7 +135,7 @@ estado : false,
               reverseButtons: true,
           }).then(async (result) => {
               if (result.isConfirmed) {
-                  await Service.delete(`/rolvista/${row.id}/`)
+                  await Service.delete(`/rolvista/${row.rolvista_id}/`)
                   Swal.fire({
                       title: "Ruta eliminado",
                       icon: "success",
