@@ -121,6 +121,7 @@ estado : false,
   }
 
     const handleDelete = async (row) => {
+      console.log(row)
       try {
           Swal.fire({
               title: "¿Estás seguro de eliminar este ruta?",
@@ -134,7 +135,7 @@ estado : false,
               reverseButtons: true,
           }).then(async (result) => {
               if (result.isConfirmed) {
-                  await Service.delete(`/rolvista/${row.id}/`)
+                  await Service.delete(`/rolvista/${row.rolvista_id}/`)
                   Swal.fire({
                       title: "Ruta eliminado",
                       icon: "success",
@@ -163,8 +164,8 @@ estado : false,
 
   const columns = [
     {
-      name: "id",
-      selector: (row) => row.id,
+      name: "rolvista_id",
+      selector: (row) => row.rolvista_id,
       sortable: true,
       omit: true,
     },
