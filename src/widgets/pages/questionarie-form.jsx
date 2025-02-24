@@ -57,7 +57,7 @@ export default function QuestionnaireForm({ questionnaireId }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-        const data = answers.map(a => ({ pregunta: a.questionId, respuesta: a.value, usuario: parseInt(userId) }));
+        const data = answers.map(a => ({ pregunta: a.questionId, respuesta: a.value, usuario: parseInt(userId), aprendiz: parseInt(Cookies.get("aprendiz")) }));
         const response = await Service.post("/respuestas/", data);
         
         Cookies.remove("aprendiz")

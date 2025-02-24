@@ -58,7 +58,7 @@ export default function QuestionnairePage() {
         setActiveTab("form");
       } catch (error) {
         console.error("Error al realizar el proceso:", error);
-        Swal.fire("Error", "Hubo un problema al realizar el proceso.", "error");
+        Swal.fire("Error", "Hubo un problema al realizar el proceso. \n"+ error.response.data.error );
       }
     }
   };

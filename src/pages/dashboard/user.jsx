@@ -150,6 +150,7 @@ estado : false,
     { name: "nombres", label: "Nombres", type: "text" },
     { name: "apellidos", label: "Apellidos", type: "text" },
     { name: "correo", label: "Correo electronico", type: "email" },
+    { name: "contrasena", label: "Contraseña", type: "password" },
     { name : "documento", label: "Numero de documento", type: "number"},
     { name: "tipoDocumento", label: "Tipo de documento", type: "select", options: tipoDocumento, },
   ]

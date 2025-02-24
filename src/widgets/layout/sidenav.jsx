@@ -25,7 +25,7 @@ export function Sidenav({ brandImg, brandName, routes }) {
     event.preventDefault(); 
     Cookies.remove("menu");
     Cookies.remove("user");
-    
+    Cookies.remove("rol");
   }
 
   const toggleSubmenu = (name) => {
